@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'views/hello_world.dart';
+import 'views/hello_world.dart'; // se importa el archivo
 
 void main() {
   runApp(const MyApp());
