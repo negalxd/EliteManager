@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.elite_manager">
+    package="com.example.testapp">
     <application
-        android:label="elite_manager"
+        android:label="testapp"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
