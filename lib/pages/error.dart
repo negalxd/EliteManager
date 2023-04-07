@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
-class HelloWorld extends StatelessWidget {
-  const HelloWorld({Key? key}) : super(key: key);
+class ErrorPage extends StatelessWidget {
+  const ErrorPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Hola Mundo'),
+        title: const Text('Error'),
       ),
       body: const Center(
-        child: Text('Hola Mundo'),
+        child: Text('Error'),
       ),
     );
   }
