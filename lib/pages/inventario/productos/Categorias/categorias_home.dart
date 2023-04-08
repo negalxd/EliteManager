@@ -4,6 +4,7 @@ class CategoriesScreen extends StatefulWidget {
   const CategoriesScreen({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _CategoriesScreen createState() => _CategoriesScreen();
 }
 
@@ -42,7 +43,7 @@ class _CategoriesScreen extends State<CategoriesScreen> {
       body: Column(
         children: [
           Container(
-            margin: EdgeInsets.only(bottom: 10.0),
+            margin: const EdgeInsets.only(bottom: 10.0),
             padding: const EdgeInsets.all(10.0),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10.0),
@@ -57,9 +58,9 @@ class _CategoriesScreen extends State<CategoriesScreen> {
                       .toList();
                 });
               },
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: 'Buscar',
-                prefixIcon: const Icon(Icons.search),
+                prefixIcon: Icon(Icons.search),
               ),
             ),
           ),
@@ -73,7 +74,7 @@ class _CategoriesScreen extends State<CategoriesScreen> {
                   },
                   child: Card(
                     child: ListTile(
-                      leading: Icon(Icons.image),
+                      leading: const Icon(Icons.image),
                       title: Text(_filteredItems[index]),
                     ),
                   ),
@@ -88,14 +89,13 @@ class _CategoriesScreen extends State<CategoriesScreen> {
               onPressed: () {
                 // Add logic to add a new item to the list here
               },
-              child: Text('Agregar categoria'),
               style: ElevatedButton.styleFrom(
-                primary: Color.fromARGB(255, 4, 75, 134),
-                onPrimary: Color.fromARGB(255, 255, 255, 255),
+                foregroundColor: const Color.fromARGB(255, 255, 255, 255), backgroundColor: const Color.fromARGB(255, 4, 75, 134),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20.0),
                 ),
               ),
+              child: const Text('Agregar categoria'),
             ),
           ),
         ],

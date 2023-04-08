@@ -38,7 +38,7 @@ class InventoryScreen extends StatelessWidget {
                 ),
                 margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 clipBehavior: Clip.antiAlias,
-                child: Container(
+                child: SizedBox(
                   height: 200,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -87,7 +87,7 @@ class InventoryScreen extends StatelessWidget {
                 ),
                 margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 clipBehavior: Clip.antiAlias,
-                child: Container(
+                child: SizedBox(
                   height: 200,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

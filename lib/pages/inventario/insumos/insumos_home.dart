@@ -42,7 +42,7 @@ class _SuppliesScreenState extends State<SuppliesScreen> {
       body: Column(
         children: [
           Container(
-            margin: EdgeInsets.only(bottom: 10.0),
+            margin: const EdgeInsets.only(bottom: 10.0),
             padding: const EdgeInsets.all(10.0),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10.0),
@@ -57,9 +57,9 @@ class _SuppliesScreenState extends State<SuppliesScreen> {
                       .toList();
                 });
               },
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: 'Buscar',
-                prefixIcon: const Icon(Icons.search),
+                prefixIcon: Icon(Icons.search),
               ),
             ),
           ),
@@ -73,7 +73,7 @@ class _SuppliesScreenState extends State<SuppliesScreen> {
                   },
                   child: Card(
                     child: ListTile(
-                      leading: Icon(Icons.image),
+                      leading: const Icon(Icons.image),
                       title: Text(_filteredItems[index]),
                       subtitle: Text('Stock del insumo ${index + 1}'),
                     ),
@@ -89,14 +89,13 @@ class _SuppliesScreenState extends State<SuppliesScreen> {
               onPressed: () {
                 // Add logic to add a new item to the list here
               },
-              child: Text('Agregar item'),
               style: ElevatedButton.styleFrom(
-                primary: Color.fromARGB(255, 4, 75, 134),
-                onPrimary: Color.fromARGB(255, 255, 255, 255),
+                foregroundColor: const Color.fromARGB(255, 255, 255, 255), backgroundColor: const Color.fromARGB(255, 4, 75, 134),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20.0),
                 ),
               ),
+              child: const Text('Agregar item'),
             ),
           ),
         ],

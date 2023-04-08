@@ -11,13 +11,13 @@ class LoginPage extends StatelessWidget {
         title: const Text('Login'),
         actions: [
           TextButton(
-            child: const Text('Ayuda'),
             style: TextButton.styleFrom(
-              primary: Color.fromARGB(255, 0, 0, 0),
+              foregroundColor: const Color.fromARGB(255, 0, 0, 0),
             ), 
             onPressed: () {
               // Acción del botón de ayuda
             },
+            child: const Text('Ayuda'),
           ),
         ],
         elevation: 0,
@@ -48,7 +48,7 @@ class LoginPage extends StatelessWidget {
                   ),
                   labelText: 'Nombre de usuario',
                   labelStyle: TextStyle(color: Color.fromARGB(255, 4, 75, 134)),
-                  contentPadding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                  contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
                 ),
               ),
             ),
@@ -63,7 +63,7 @@ class LoginPage extends StatelessWidget {
                   ),
                   labelText: 'Contraseña',
                   labelStyle: TextStyle(color: Color.fromARGB(255, 4, 75, 134)),
-                  contentPadding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                  contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
                 ),
               ),
             ),
@@ -72,25 +72,24 @@ class LoginPage extends StatelessWidget {
                 // Acción del botón de inicio de sesión
                 Navigator.pushNamed(context, 'home');
               },
-              child: const Text('Iniciar sesión'),
               style: ElevatedButton.styleFrom(
-                primary: Color.fromARGB(255, 4, 75, 134),
-                onPrimary: Colors.white,
+                foregroundColor: Colors.white, backgroundColor: const Color.fromARGB(255, 4, 75, 134),
                 shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(30)),
                 ),
                 minimumSize: const Size(0, 50),
               ),
+              child: const Text('Iniciar sesión'),
             ),
             TextButton(
               onPressed: () {
                 Navigator.pushNamed(context, 'forgot_password'
                 );
               },
-              child: const Text('¿Olvidaste tu contraseña?'),
               style: TextButton.styleFrom(
-                primary: Color.fromARGB(255, 4, 75, 134),
-              ),  
+                foregroundColor: const Color.fromARGB(255, 4, 75, 134),
+              ),
+              child: const Text('¿Olvidaste tu contraseña?'),  
             ),
             const Expanded(child: SizedBox()),
             Align(
@@ -98,7 +97,7 @@ class LoginPage extends StatelessWidget {
               child:
             Container(
               height: 180,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage('assets/wave.png'),
                   fit: BoxFit.fitHeight,

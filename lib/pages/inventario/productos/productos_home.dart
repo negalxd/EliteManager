@@ -14,22 +14,22 @@ class ProductHomeScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.inventory, size: 50),
-            SizedBox(height: 20),
+            const Icon(Icons.inventory, size: 50),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
                 Navigator.pushNamed(
                   context,'productospag');
               },
-              child: Text('Productos'),
+              child: const Text('Productos'),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             ElevatedButton(
               onPressed: () {
                 Navigator.pushNamed(
                   context,'categorias');
               },
-              child: Text('Categorias'),
+              child: const Text('Categorias'),
             ),
           ],
         ),

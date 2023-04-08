@@ -7,7 +7,7 @@ class ErrorPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final url = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
+    const url = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
     final uri = Uri.parse(url);
     return Scaffold(
       appBar: AppBar(

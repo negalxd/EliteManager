@@ -72,7 +72,7 @@ class HomePage extends StatelessWidget {
           ],
         ),
       ),
-      body: Center(
+      body: const Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -107,7 +107,7 @@ class CardItem extends StatelessWidget {
   final String imagePath;
   final String routeName;
 
-  CardItem({required this.title, required this.imagePath, required this.routeName});
+  const CardItem({required this.title, required this.imagePath, required this.routeName});
 
   @override
   Widget build(BuildContext context) {
@@ -124,7 +124,7 @@ class CardItem extends StatelessWidget {
         margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         clipBehavior: Clip.antiAlias,
         child:  Container(
-          color: Color.fromARGB(255, 4, 75, 134),
+          color: const Color.fromARGB(255, 4, 75, 134),
           height: 170,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -139,7 +139,7 @@ class CardItem extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 2),
+              const SizedBox(height: 2),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: Column(
@@ -149,7 +149,7 @@ class CardItem extends StatelessWidget {
                       title,
                       style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
                     ),
-                    SizedBox(height: 2),
+                    const SizedBox(height: 2),
                     const Text(
                       ' ',
                       style: TextStyle(fontSize: 10),
