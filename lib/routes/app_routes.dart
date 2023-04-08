@@ -7,9 +7,12 @@ class AppRoutes {
 
   static final routes = <String, WidgetBuilder>{
     'login': (BuildContext context) => const LoginPage(),
-    'home': (BuildContext context) => const HomePage(),
+    'home': (BuildContext context) => HomePage(),
     'error': (BuildContext context) => const ErrorPage(),
     'forgot_password': (BuildContext context) => const ForgotPasswordScreen(),
+    'inventario': (BuildContext context) => const InventoryScreen(),
+    'proveedores': (BuildContext context) => const ProvidersScreen(),
+    'ventas': (BuildContext context) => const SalesScreen(),
 
   };
   static Route<dynamic> onGenerateRoute(RouteSettings settings){

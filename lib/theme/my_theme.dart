@@ -8,6 +8,7 @@ class MyTheme {
     brightness: Brightness.light,
     fontFamily: 'Roboto',
     appBarTheme: const AppBarTheme(
+      iconTheme: IconThemeData(color: Colors.white),
       color: Color.fromRGBO(17, 100, 168, 1),
       titleTextStyle: TextStyle(color: Colors.white, fontSize: 20),
       elevation: 10,

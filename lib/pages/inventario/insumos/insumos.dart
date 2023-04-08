@@ -1,0 +1,1 @@
+export 'package:elite_manager/pages/inventario/insumos/insumos_home.dart';
