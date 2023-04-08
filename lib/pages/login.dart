@@ -46,8 +46,9 @@ class LoginPage extends StatelessWidget {
                     borderSide: BorderSide(color: Color.fromARGB(255, 4, 75, 134)),
                     borderRadius: BorderRadius.all(Radius.circular(5)),
                   ),
-                  hintText: 'Nombre de usuario',
-                  prefixIcon: Icon(Icons.person),
+                  labelText: 'Nombre de usuario',
+                  labelStyle: TextStyle(color: Color.fromARGB(255, 4, 75, 134)),
+                  contentPadding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
                 ),
               ),
             ),
@@ -60,8 +61,9 @@ class LoginPage extends StatelessWidget {
                     borderSide: BorderSide(color: Color.fromARGB(255, 4, 75, 134)),
                     borderRadius: BorderRadius.all(Radius.circular(5)),
                   ),
-                  hintText: 'Contraseña',
-                  prefixIcon: Icon(Icons.lock),
+                  labelText: 'Contraseña',
+                  labelStyle: TextStyle(color: Color.fromARGB(255, 4, 75, 134)),
+                  contentPadding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
                 ),
               ),
             ),
@@ -106,7 +108,6 @@ class LoginPage extends StatelessWidget {
             ),
           ],
         ),
-        
       ),
     );
   }
