@@ -99,7 +99,7 @@ class LoginPage extends StatelessWidget {
               decoration: BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage('assets/wave.png'),
-                  fit: BoxFit.fitWidth,
+                  fit: BoxFit.fitHeight,
                 ),
               ),
             ),
