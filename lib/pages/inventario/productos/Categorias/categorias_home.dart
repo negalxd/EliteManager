@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-class SuppliesScreen extends StatefulWidget {
-  const SuppliesScreen({Key? key}) : super(key: key);
+class CategoriesScreen extends StatefulWidget {
+  const CategoriesScreen({Key? key}) : super(key: key);
 
   @override
-  _SuppliesScreenState createState() => _SuppliesScreenState();
+  _CategoriesScreen createState() => _CategoriesScreen();
 }
 
-class _SuppliesScreenState extends State<SuppliesScreen> {
-  List<String> _listItems = ['Salchichas','Panes','Papitas','Palta', 'Tomates','Ketchup', 'Mostaza', 'Item 8','Item 9','Item 10'];
+class _CategoriesScreen extends State<CategoriesScreen> {
+  List<String> _listItems = ['Categoria 1','Categoria 2','Categoria 3','Item 4', 'Item 5','Item 6', 'Item 7', 'Item 8','Item 9','Item 10'];
 
   List<String> _filteredItems = [];
 
@@ -27,7 +27,7 @@ class _SuppliesScreenState extends State<SuppliesScreen> {
         title: const Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('Gestión de Insumos'),
+            Text('Gestión de Categorias'),
           ],
         ),
         actions: [
@@ -75,7 +75,6 @@ class _SuppliesScreenState extends State<SuppliesScreen> {
                     child: ListTile(
                       leading: Icon(Icons.image),
                       title: Text(_filteredItems[index]),
-                      subtitle: Text('Stock del insumo ${index + 1}'),
                     ),
                   ),
                 );
@@ -89,7 +88,7 @@ class _SuppliesScreenState extends State<SuppliesScreen> {
               onPressed: () {
                 // Add logic to add a new item to the list here
               },
-              child: Text('Agregar item'),
+              child: Text('Agregar categoria'),
               style: ElevatedButton.styleFrom(
                 primary: Color.fromARGB(255, 4, 75, 134),
                 onPrimary: Color.fromARGB(255, 255, 255, 255),

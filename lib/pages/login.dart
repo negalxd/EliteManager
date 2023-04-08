@@ -9,25 +9,38 @@ class LoginPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Iniciar sesión'),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.help),
+          TextButton(
+            child: const Text('Ayuda'),
+            style: TextButton.styleFrom(
+              primary: Color.fromARGB(255, 252, 252, 252),
+            ), 
             onPressed: () {
               // Acción del botón de ayuda
             },
           ),
         ],
       ),
-      body: Center(
-        
+      body: Padding(
+        padding: const EdgeInsets.all(5.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          // crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const SizedBox(height: 40),
+            const Text(
+              'Iniciar sesión',
+              style: TextStyle(
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
+              ), 
+            ),
+            const SizedBox(height: 20),
             Container(
-              margin: const EdgeInsets.all(20),
+              margin: const EdgeInsets.all(10),
               child: const TextField(
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blue),
+                    borderSide: BorderSide(color: Color.fromARGB(255, 4, 75, 134)),
                     borderRadius: BorderRadius.all(Radius.circular(5)),
                   ),
                   hintText: 'Nombre de usuario',
@@ -36,12 +49,12 @@ class LoginPage extends StatelessWidget {
               ),
             ),
             Container(
-              margin: const EdgeInsets.all(20),
+              margin: const EdgeInsets.all(10),
               child: const TextField(
                 obscureText: true,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blue),
+                    borderSide: BorderSide(color: Color.fromARGB(255, 4, 75, 134)),
                     borderRadius: BorderRadius.all(Radius.circular(5)),
                   ),
                   hintText: 'Contraseña',
@@ -52,10 +65,17 @@ class LoginPage extends StatelessWidget {
             ElevatedButton(
               onPressed: () {
                 // Acción del botón de inicio de sesión
-                Navigator.pushNamed( context, 'home'               
-                );
+                Navigator.pushNamed(context, 'home');
               },
               child: const Text('Iniciar sesión'),
+              style: ElevatedButton.styleFrom(
+                primary: Color.fromARGB(255, 4, 75, 134),
+                onPrimary: Colors.white,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(30)),
+                ),
+                minimumSize: const Size(0, 50),
+              ),
             ),
             TextButton(
               onPressed: () {
@@ -63,9 +83,28 @@ class LoginPage extends StatelessWidget {
                 );
               },
               child: const Text('¿Olvidaste tu contraseña?'),
+              style: TextButton.styleFrom(
+                primary: Color.fromARGB(255, 4, 75, 134),
+              ),  
+            ),
+            const Expanded(child: SizedBox()),
+            const SizedBox(height: 10),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child:
+            Container(
+              height: 180,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/wave.png'),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
             ),
           ],
         ),
+        
       ),
     );
   }

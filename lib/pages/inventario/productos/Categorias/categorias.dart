@@ -1,0 +1,1 @@
+export 'package:elite_manager/pages/inventario/productos/Categorias/categorias_home.dart';
