@@ -1,33 +1,32 @@
-
 import 'package:flutter/material.dart';
 
-class InventoryScreen extends StatelessWidget {
-  const InventoryScreen({super.key});
+class ProvidersScreen extends StatelessWidget {
+  const ProvidersScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Inventarios'),
+        title: Text('Proveedores'),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.inventory, size: 50),
+            Icon(Icons.local_shipping, size: 50),
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
                 // Acción del botón
               },
-              child: Text('Gestion de productos'),
+              child: Text('Gestion de proveedores'),
             ),
             SizedBox(height: 10),
             ElevatedButton(
               onPressed: () {
                 // Acción del botón
               },
-              child: Text('Gestion de Insumos'),
+              child: Text('Gestion de ordenes de compra'),
             ),
           ],
         ),
