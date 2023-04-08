@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 
 class MyTheme {
-  static const Color primary = Color.fromRGBO(4, 75, 134, 1);
+  static const Color primary = Color.fromRGBO(255, 255, 255, 1);
   static final ThemeData mytheme = ThemeData(
     useMaterial3: true,
     primaryColor: primary,
     brightness: Brightness.light,
     fontFamily: 'Roboto',
     appBarTheme: const AppBarTheme(
-      iconTheme: IconThemeData(color: Colors.white),
-      color: Color.fromRGBO(17, 100, 168, 1),
-      titleTextStyle: TextStyle(color: Colors.white, fontSize: 20),
-      elevation: 10,
+      iconTheme: IconThemeData(color: Color.fromARGB(255, 0, 0, 0)),
+      color: Color.fromRGBO(255, 255, 255, 1),
+      titleTextStyle: TextStyle(color: Color.fromARGB(255, 0, 0, 0), fontSize: 20),
+      elevation: 0,
     ),
   );
 }

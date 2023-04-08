@@ -1,33 +1,129 @@
-
 import 'package:flutter/material.dart';
 
 class InventoryScreen extends StatelessWidget {
-  const InventoryScreen({super.key});
+  const InventoryScreen({Key? key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Inventarios'),
+        appBar: AppBar(
+        title: const Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Inventarios'),
+          ],
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.person),
+            onPressed: () {
+              Navigator.pushNamed(context, 'error');
+            },
+          ),
+        ],
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.inventory, size: 50),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                // Acción del botón
+            const SizedBox(height: 20),
+            InkWell(
+              onTap: () {
+                Navigator.pushNamed(context, 'productoshome');
               },
-              child: Text('Gestion de productos'),
+              child: Card(
+                elevation: 6,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                clipBehavior: Clip.antiAlias,
+                child: SizedBox(
+                  height: 200,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        height: 120,
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          image: DecorationImage(
+                            image:AssetImage('assets/gestionProd.png'),
+                            fit: BoxFit.fitHeight,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Gestion de productos',
+                              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(height: 5),
+                            Text(
+                              ' ',
+                              style: TextStyle(fontSize: 15),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ),
-            SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: () {
-                // Acción del botón
+            InkWell(
+              onTap: () {
+                Navigator.pushNamed(context, 'insumos');
               },
-              child: Text('Gestion de Insumos'),
+              child: Card(
+                elevation: 6,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                clipBehavior: Clip.antiAlias,
+                child: SizedBox(
+                  height: 200,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        height: 120,
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          image: DecorationImage(
+                            image: AssetImage('assets/gestionIns.png'),
+                            fit: BoxFit.fitHeight,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Gestion de Insumos',
+                              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(height: 5),
+                            Text(
+                              ' ',
+                              style: TextStyle(fontSize: 15),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ),
           ],
         ),

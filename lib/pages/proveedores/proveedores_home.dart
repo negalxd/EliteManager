@@ -7,26 +7,26 @@ class ProvidersScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Proveedores'),
+        title: const Text('Proveedores'),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.local_shipping, size: 50),
-            SizedBox(height: 20),
+            const Icon(Icons.local_shipping, size: 50),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
                 // Acción del botón
               },
-              child: Text('Gestion de proveedores'),
+              child: const Text('Gestion de proveedores'),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             ElevatedButton(
               onPressed: () {
                 // Acción del botón
               },
-              child: Text('Gestion de ordenes de compra'),
+              child: const Text('Gestion de ordenes de compra'),
             ),
           ],
         ),
