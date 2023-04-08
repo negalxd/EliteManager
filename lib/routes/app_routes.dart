@@ -21,7 +21,7 @@ class AppRoutes {
     'categorias': (BuildContext context) => const CategoriesScreen(),
     ///////////////////////////productos-Productos///////////////////////////////
     'productospag': (BuildContext context) => const ProductPagScreen(),
-  
+    ///////////////////////////
   };
   static Route<dynamic> onGenerateRoute(RouteSettings settings){
     return MaterialPageRoute(
