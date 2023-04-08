@@ -23,6 +23,7 @@ class HomePage extends StatelessWidget {
             },
           ),
         ],
+        
       ),
       drawer: Drawer(
         child: Column(
@@ -90,6 +91,7 @@ class HomePage extends StatelessWidget {
               imagePath: 'assets/gestionIns.png',
               routeName: 'ventas',
             ),
+            
           ],
         ),
       ),
@@ -97,6 +99,9 @@ class HomePage extends StatelessWidget {
   }
 }
 
+
+
+////////////////////widget de las cards////////////////////////////
 class CardItem extends StatelessWidget {
   final String title;
   final String imagePath;
@@ -111,13 +116,21 @@ class CardItem extends StatelessWidget {
         Navigator.pushNamed(context, routeName);
       },
       child: Card(
-        child: Container(
-          height: 180,
+        color: Colors.white,
+        elevation: 6,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        clipBehavior: Clip.antiAlias,
+        child:  Container(
+          color: Color.fromARGB(255, 4, 75, 134),
+          height: 170,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                height: 100,
+                height: 110,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   image: DecorationImage(
@@ -126,7 +139,7 @@ class CardItem extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 10),
+              SizedBox(height: 2),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: Column(
@@ -134,12 +147,13 @@ class CardItem extends StatelessWidget {
                   children: [
                     Text(
                       title,
-                      style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                      style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
                     ),
-                    SizedBox(height: 5),
-                    Text(
+                    SizedBox(height: 2),
+                    const Text(
                       ' ',
                       style: TextStyle(fontSize: 10),
+                      
                     ),
                   ],
                 ),
@@ -147,12 +161,6 @@ class CardItem extends StatelessWidget {
             ],
           ),
         ),
-        elevation: 6,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-        margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        clipBehavior: Clip.antiAlias,
       ),
     );
   }

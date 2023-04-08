@@ -8,7 +8,7 @@ class LoginPage extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset : false,
       appBar: AppBar(
-        title: const Text('Iniciar sesión'),
+        title: const Text('Login'),
         actions: [
           TextButton(
             child: const Text('Ayuda'),

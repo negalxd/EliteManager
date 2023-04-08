@@ -26,12 +26,18 @@ class InventoryScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             InkWell(
               onTap: () {
                 Navigator.pushNamed(context, 'productoshome');
               },
               child: Card(
+                elevation: 6,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                clipBehavior: Clip.antiAlias,
                 child: Container(
                   height: 200,
                   child: Column(
@@ -39,7 +45,7 @@ class InventoryScreen extends StatelessWidget {
                     children: [
                       Container(
                         height: 120,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: Colors.white,
                           image: DecorationImage(
                             image:AssetImage('assets/gestionProd.png'),
@@ -47,9 +53,9 @@ class InventoryScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SizedBox(height: 10),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      const SizedBox(height: 10),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -68,12 +74,6 @@ class InventoryScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                elevation: 6,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                clipBehavior: Clip.antiAlias,
               ),
             ),
             InkWell(
@@ -81,6 +81,12 @@ class InventoryScreen extends StatelessWidget {
                 Navigator.pushNamed(context, 'insumos');
               },
               child: Card(
+                elevation: 6,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                clipBehavior: Clip.antiAlias,
                 child: Container(
                   height: 200,
                   child: Column(
@@ -88,7 +94,7 @@ class InventoryScreen extends StatelessWidget {
                     children: [
                       Container(
                         height: 120,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: Colors.white,
                           image: DecorationImage(
                             image: AssetImage('assets/gestionIns.png'),
@@ -96,9 +102,9 @@ class InventoryScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SizedBox(height: 10),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      const SizedBox(height: 10),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -117,12 +123,6 @@ class InventoryScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                elevation: 6,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                clipBehavior: Clip.antiAlias,
               ),
             ),
           ],
