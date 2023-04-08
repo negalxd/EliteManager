@@ -6,19 +6,22 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset : false,
       appBar: AppBar(
         title: const Text('Iniciar sesión'),
         actions: [
           TextButton(
             child: const Text('Ayuda'),
             style: TextButton.styleFrom(
-              primary: Color.fromARGB(255, 252, 252, 252),
+              primary: Color.fromARGB(255, 0, 0, 0),
             ), 
             onPressed: () {
               // Acción del botón de ayuda
             },
           ),
         ],
+        elevation: 0,
+        backgroundColor: Colors.white,
       ),
       body: Padding(
         padding: const EdgeInsets.all(5.0),
@@ -26,7 +29,7 @@ class LoginPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           // crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 40),
+            const SizedBox(height: 80),
             const Text(
               'Iniciar sesión',
               style: TextStyle(
@@ -88,7 +91,6 @@ class LoginPage extends StatelessWidget {
               ),  
             ),
             const Expanded(child: SizedBox()),
-            const SizedBox(height: 10),
             Align(
               alignment: Alignment.bottomCenter,
               child:
@@ -97,7 +99,7 @@ class LoginPage extends StatelessWidget {
               decoration: BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage('assets/wave.png'),
-                  fit: BoxFit.cover,
+                  fit: BoxFit.fitWidth,
                 ),
               ),
             ),
