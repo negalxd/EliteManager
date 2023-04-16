@@ -69,7 +69,7 @@ class _SuppliesScreenState extends State<SuppliesScreen> {
               itemBuilder: (context, index) {
                 return InkWell(
                   onTap: () {
-                    // Add logic for when the card is tapped
+                    Navigator.pushNamed(context, 'insumositem');
                   },
                   child: Card(
                     child: ListTile(
