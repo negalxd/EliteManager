@@ -26,13 +26,6 @@ class SalesScreen extends StatelessWidget {
               onPressed: () {
                 // Acción del botón
               },
-              child: const Text('Gestión de Cotizaciones'),
-            ),
-            const SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: () {
-                // Acción del botón
-              },
               child: const Text('Gestión de ordenes de trabajo'),
             ),
             const SizedBox(height: 10),

@@ -12,7 +12,7 @@ class HomePage extends StatelessWidget {
         title: const Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('Completinis'),
+            Text('Dominó'),
           ],
         ),
         actions: [
@@ -26,52 +26,108 @@ class HomePage extends StatelessWidget {
         
       ),
       drawer: Drawer(
-        child: Column(
-          children: [
-            const DrawerHeader(
-              child: Text('Elite Manager'),
-            ),
-            Expanded(
-              child: ListView.builder(
-                  itemCount: _menuItems.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return ListTile(
-                      title: Text(_menuItems[index]),
-                      onTap: () {
-                        Navigator.pop(context);
-                        // Navegar a la pantalla correspondiente
-                        if (index == 0) {
-                          Navigator.pushNamed(
-                            context,
-                            'inventario',
-                          );
-                        } else if (index == 1) {
-                          Navigator.pushNamed(
-                            context,
-                            'proveedores',
-                          );
-                        } else if (index == 2) {
-                          Navigator.pushNamed(
-                            context,
-                            'ventas',
-                          );
-                        }
-                      },
-                    );
-                  }),
-            ),
-            const Divider(),
-            ListTile(
-              leading: const Icon(Icons.logout),
-              title: const Text('Cerrar sesion'),
-              iconColor: Colors.red,
-              onTap: () {
-                Navigator.pushNamed(context, 'login');
-              },
-            ),
-          ],
+  child: Column(
+    children: [
+      Container(
+        height: 150,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/gestionIns.png'),
+            fit: BoxFit.fitHeight,
+          ),
         ),
       ),
+      const DrawerHeader(
+        child: Text('Elite Manager'),
+      ),
+      Expanded(
+        child: ListView.builder(
+            itemCount: _menuItems.length,
+            itemBuilder: (BuildContext context, int index) {
+              return ListTile(
+                title: Text(_menuItems[index]),
+                onTap: () {
+                  Navigator.pop(context);
+                  // Navegar a la pantalla correspondiente
+                  if (index == 0) {
+                    Navigator.pushNamed(
+                      context,
+                      'inventario',
+                    );
+                  } else if (index == 1) {
+                    Navigator.pushNamed(
+                      context,
+                      'proveedores',
+                    );
+                  } else if (index == 2) {
+                    Navigator.pushNamed(
+                      context,
+                      'ventas',
+                    );
+                  }
+                },
+              );
+            }),
+      ),
+      const Divider(),
+      ListTile(
+        leading: const Icon(Icons.logout),
+        title: const Text('Cerrar sesion'),
+        iconColor: Colors.red,
+        onTap: () {
+          Navigator.pushNamed(context, 'login');
+        },
+      ),
+    ],
+  ),
+),
+      // drawer: Drawer(
+      //   child: Column(
+      //     children: [
+      //       const DrawerHeader(
+      //         child: Text('Elite Manager'),
+      //       ),
+      //       Expanded(
+      //         child: ListView.builder(
+      //             itemCount: _menuItems.length,
+      //             itemBuilder: (BuildContext context, int index) {
+      //               return ListTile(
+      //                 title: Text(_menuItems[index]),
+      //                 onTap: () {
+      //                   Navigator.pop(context);
+      //                   // Navegar a la pantalla correspondiente
+      //                   if (index == 0) {
+      //                     Navigator.pushNamed(
+      //                       context,
+      //                       'inventario',
+      //                     );
+      //                   } else if (index == 1) {
+      //                     Navigator.pushNamed(
+      //                       context,
+      //                       'proveedores',
+      //                     );
+      //                   } else if (index == 2) {
+      //                     Navigator.pushNamed(
+      //                       context,
+      //                       'ventas',
+      //                     );
+      //                   }
+      //                 },
+      //               );
+      //             }),
+      //       ),
+      //       const Divider(),
+      //       ListTile(
+      //         leading: const Icon(Icons.logout),
+      //         title: const Text('Cerrar sesion'),
+      //         iconColor: Colors.red,
+      //         onTap: () {
+      //           Navigator.pushNamed(context, 'login');
+      //         },
+      //       ),
+      //     ],
+      //   ),
+      // ),
       body: const Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

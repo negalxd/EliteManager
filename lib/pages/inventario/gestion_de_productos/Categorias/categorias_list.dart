@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 
-class SuppliesScreen extends StatefulWidget {
-  const SuppliesScreen({Key? key}) : super(key: key);
+class CategoriesScreen extends StatefulWidget {
+  const CategoriesScreen({Key? key}) : super(key: key);
 
   @override
-  _SuppliesScreenState createState() => _SuppliesScreenState();
+  // ignore: library_private_types_in_public_api
+  _CategoriesScreenState createState() => _CategoriesScreenState();
 }
 
-class _SuppliesScreenState extends State<SuppliesScreen> {
-  List<String> _listItems = ['Salchichas','Panes','Papitas','Palta', 'Tomates','Ketchup', 'Mostaza', 'Item 8','Item 9','Item 10'];
+class _CategoriesScreenState extends State<CategoriesScreen> {
+  List<String> _listItems = [    'Categoria 1',    'Categoria 2',    'Categoria 3',    'Item 4',    'Item 5',    'Item 6',    'Item 7',    'Item 8',    'Item 9',    'Item 10'  ];
 
   List<String> _filteredItems = [];
 
@@ -20,6 +21,34 @@ class _SuppliesScreenState extends State<SuppliesScreen> {
     _filteredItems = _listItems;
   }
 
+  void _deleteCategory(String category) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Eliminar categoria'),
+          content: Text('¿Estás seguro de que quieres eliminar la categoría $category?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cancelar'),
+            ),
+            TextButton(
+              onPressed: () {
+                setState(() {
+                  _listItems.remove(category);
+                  _filteredItems = _listItems;
+                });
+                Navigator.pop(context);
+              },
+              child: const Text('Eliminar'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,7 +56,7 @@ class _SuppliesScreenState extends State<SuppliesScreen> {
         title: const Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('Gestión de Insumos'),
+            Text('Gestión de Categorias'),
           ],
         ),
         actions: [
@@ -67,15 +96,23 @@ class _SuppliesScreenState extends State<SuppliesScreen> {
             child: ListView.builder(
               itemCount: _filteredItems.length,
               itemBuilder: (context, index) {
-                return InkWell(
-                  onTap: () {
-                    // Add logic for when the card is tapped
-                  },
+                final category = _filteredItems[index];
+                return Dismissible(
+                  key: Key(category),
+                  onDismissed: (_) => _deleteCategory(category),
+                  direction: DismissDirection.endToStart,
+                  background: Container(
+                    alignment: Alignment.centerRight,
+                    color: Colors.red,
+                    child: const Icon(Icons.delete),
+                  ),
                   child: Card(
                     child: ListTile(
-                      leading: const Icon(Icons.image),
-                      title: Text(_filteredItems[index]),
-                      subtitle: Text('Stock del insumo ${index + 1}'),
+                      title: Text(category),
+                      trailing: IconButton(
+                        icon: const Icon(Icons.delete),
+                        onPressed: () => _deleteCategory(category),
+                      ),
                     ),
                   ),
                 );
@@ -87,7 +124,7 @@ class _SuppliesScreenState extends State<SuppliesScreen> {
             margin: const EdgeInsets.symmetric(horizontal: 100.0),
             child: ElevatedButton(
               onPressed: () {
-                // Add logic to add a new item to the list here
+                Navigator.pushNamed(context, 'categoriaslistcreate');
               },
               style: ElevatedButton.styleFrom(
                 foregroundColor: const Color.fromARGB(255, 255, 255, 255), backgroundColor: const Color.fromARGB(255, 4, 75, 134),
@@ -95,7 +132,7 @@ class _SuppliesScreenState extends State<SuppliesScreen> {
                   borderRadius: BorderRadius.circular(20.0),
                 ),
               ),
-              child: const Text('Agregar item'),
+              child: const Text('Agregar categoria'),
             ),
           ),
         ],
