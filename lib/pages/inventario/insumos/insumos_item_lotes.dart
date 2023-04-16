@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-class SuppliesScreen extends StatefulWidget {
-  const SuppliesScreen({Key? key}) : super(key: key);
+class SuppliesLoteScreen extends StatefulWidget {
+  const SuppliesLoteScreen({Key? key}) : super(key: key);
 
   @override
-  _SuppliesScreenState createState() => _SuppliesScreenState();
+  _SuppliesLoteScreenState createState() => _SuppliesLoteScreenState();
 }
 
-class _SuppliesScreenState extends State<SuppliesScreen> {
-  List<String> _listItems = ['Salchichas','Panes','Papitas','Palta', 'Tomates','Ketchup', 'Mostaza', 'Item 8','Item 9','Item 10'];
+class _SuppliesLoteScreenState extends State<SuppliesLoteScreen> {
+  List<String> _listItems = ['KAJSHDGK127313G123713H','123123781321EU1GSUGUS112','123132TF1YGWE7I12G212312'];
 
   List<String> _filteredItems = [];
 
@@ -27,7 +27,7 @@ class _SuppliesScreenState extends State<SuppliesScreen> {
         title: const Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('Gestión de Insumos'),
+            Text('Lotes Insumos'),
           ],
         ),
         actions: [
@@ -41,7 +41,7 @@ class _SuppliesScreenState extends State<SuppliesScreen> {
       ),
       body: Column(
         children: [
-                   Container(
+                  Container(
             margin: const EdgeInsets.only(bottom: 10.0),
             padding: const EdgeInsets.all(10.0),
             decoration: BoxDecoration(
@@ -87,14 +87,14 @@ class _SuppliesScreenState extends State<SuppliesScreen> {
               itemBuilder: (context, index) {
                 return InkWell(
                   onTap: () {
-                    Navigator.pushNamed(context, 'insumoslist');
+                    //
                   },
                   child: Card(
                     margin: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                     child: ListTile(
                       leading: Container(
                         width: 50.0,
-                        child: Image.asset('assets/gestionProd.png'),
+                        child: Image.asset('assets/vianesas.png'),
                       ),
                       title: Text(_filteredItems[index]),
                       subtitle: Text('Stock del insumo ${index + 1}'),
@@ -104,22 +104,21 @@ class _SuppliesScreenState extends State<SuppliesScreen> {
               },
             ),  
           ),
-          Container(
-            width: double.infinity,
-            margin: const EdgeInsets.symmetric(horizontal: 100.0),
-            child: ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, 'insumoslistcreate');
-              },
-              style: ElevatedButton.styleFrom(
-                foregroundColor: const Color.fromARGB(255, 255, 255, 255), backgroundColor: const Color.fromARGB(255, 4, 75, 134),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
-              ),
-              child: const Text('Agregar Categoria'),
-            ),
-          ),
+        //   Container(
+        //     width: double.infinity,
+        //     margin: const EdgeInsets.symmetric(horizontal: 100.0),
+        //     child: ElevatedButton(
+        //       onPressed: () {
+        //       },
+        //       style: ElevatedButton.styleFrom(
+        //         foregroundColor: const Color.fromARGB(255, 255, 255, 255), backgroundColor: const Color.fromARGB(255, 4, 75, 134),
+        //         shape: RoundedRectangleBorder(
+        //           borderRadius: BorderRadius.circular(20.0),
+        //         ),
+        //       ),
+        //       child: const Text('Agregar Categoria'),
+        //     ),
+        //   ),
         ],
       ),
     );

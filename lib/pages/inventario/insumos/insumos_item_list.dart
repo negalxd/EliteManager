@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-class SuppliesScreen extends StatefulWidget {
-  const SuppliesScreen({Key? key}) : super(key: key);
+class SuppliesItemScreen extends StatefulWidget {
+  const SuppliesItemScreen({Key? key}) : super(key: key);
 
   @override
-  _SuppliesScreenState createState() => _SuppliesScreenState();
+  _SuppliesItemScreenState createState() => _SuppliesItemScreenState();
 }
 
-class _SuppliesScreenState extends State<SuppliesScreen> {
-  List<String> _listItems = ['Salchichas','Panes','Papitas','Palta', 'Tomates','Ketchup', 'Mostaza', 'Item 8','Item 9','Item 10'];
+class _SuppliesItemScreenState extends State<SuppliesItemScreen> {
+  List<String> _listItems = [    'Salchichas Veganas',    'Salchichas de pollo',    'Salchichas Sureñas',    'Salchichas de cerdo',    'Salchichas de res'  ];
 
   List<String> _filteredItems = [];
 
@@ -27,7 +27,7 @@ class _SuppliesScreenState extends State<SuppliesScreen> {
         title: const Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('Gestión de Insumos'),
+            Text('Insumos disponibles'),
           ],
         ),
         actions: [
@@ -41,7 +41,7 @@ class _SuppliesScreenState extends State<SuppliesScreen> {
       ),
       body: Column(
         children: [
-                   Container(
+          Container(
             margin: const EdgeInsets.only(bottom: 10.0),
             padding: const EdgeInsets.all(10.0),
             decoration: BoxDecoration(
@@ -87,10 +87,11 @@ class _SuppliesScreenState extends State<SuppliesScreen> {
               itemBuilder: (context, index) {
                 return InkWell(
                   onTap: () {
-                    Navigator.pushNamed(context, 'insumoslist');
+                    Navigator.pushNamed(context, 'insumositemlote');
                   },
                   child: Card(
-                    margin: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: 10.0, vertical: 5.0),
                     child: ListTile(
                       leading: Container(
                         width: 50.0,
@@ -102,22 +103,23 @@ class _SuppliesScreenState extends State<SuppliesScreen> {
                   ),
                 );
               },
-            ),  
+            ),
           ),
           Container(
             width: double.infinity,
             margin: const EdgeInsets.symmetric(horizontal: 100.0),
             child: ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, 'insumoslistcreate');
+                Navigator.pushNamed(context, 'insumositemcreate');
               },
               style: ElevatedButton.styleFrom(
-                foregroundColor: const Color.fromARGB(255, 255, 255, 255), backgroundColor: const Color.fromARGB(255, 4, 75, 134),
+                foregroundColor: const Color.fromARGB(255, 255, 255, 255),
+                backgroundColor: const Color.fromARGB(255, 4, 75, 134),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20.0),
                 ),
               ),
-              child: const Text('Agregar Categoria'),
+              child: const Text('Agregar item'),
             ),
           ),
         ],
