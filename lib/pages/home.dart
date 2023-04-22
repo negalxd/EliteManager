@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:elite_manager/pages/login.dart';
 
 class HomePage extends StatelessWidget {
   final List<String> _menuItems = [    'Inventarios',    'Proveedores',    'Ventas',  ];
@@ -71,84 +72,39 @@ class HomePage extends StatelessWidget {
       ),
       const Divider(),
       ListTile(
-        leading: const Icon(Icons.logout),
-        title: const Text('Cerrar sesion'),
-        iconColor: Colors.red,
-        onTap: () {
-          Navigator.pushNamed(context, 'login');
-        },
-      ),
+      leading: const Icon(Icons.logout),
+      title: const Text('Cerrar sesion'),
+      iconColor: Colors.red,
+      onTap: () {
+        Navigator.pushNamedAndRemoveUntil(context, 'login', (route) => false);
+      },
+    ),
+
     ],
   ),
 ),
-      // drawer: Drawer(
-      //   child: Column(
-      //     children: [
-      //       const DrawerHeader(
-      //         child: Text('Elite Manager'),
-      //       ),
-      //       Expanded(
-      //         child: ListView.builder(
-      //             itemCount: _menuItems.length,
-      //             itemBuilder: (BuildContext context, int index) {
-      //               return ListTile(
-      //                 title: Text(_menuItems[index]),
-      //                 onTap: () {
-      //                   Navigator.pop(context);
-      //                   // Navegar a la pantalla correspondiente
-      //                   if (index == 0) {
-      //                     Navigator.pushNamed(
-      //                       context,
-      //                       'inventario',
-      //                     );
-      //                   } else if (index == 1) {
-      //                     Navigator.pushNamed(
-      //                       context,
-      //                       'proveedores',
-      //                     );
-      //                   } else if (index == 2) {
-      //                     Navigator.pushNamed(
-      //                       context,
-      //                       'ventas',
-      //                     );
-      //                   }
-      //                 },
-      //               );
-      //             }),
-      //       ),
-      //       const Divider(),
-      //       ListTile(
-      //         leading: const Icon(Icons.logout),
-      //         title: const Text('Cerrar sesion'),
-      //         iconColor: Colors.red,
-      //         onTap: () {
-      //           Navigator.pushNamed(context, 'login');
-      //         },
-      //       ),
-      //     ],
-      //   ),
-      // ),
       body: const Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CardItem(
-              title: 'Inventarios',
-              imagePath: 'assets/gestionInvent.png',
-              routeName: 'inventario',
-            ),
-            CardItem(
-              title: 'Proveedores',
-              imagePath: 'assets/gestionProd.png',
-              routeName: 'proveedores',
-            ),
-            CardItem(
-              title: 'Ventas',
-              imagePath: 'assets/gestionIns.png',
-              routeName: 'ventas',
-            ),
-            
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CardItem(
+                title: 'Inventarios',
+                imagePath: 'assets/gestionInvent.png',
+                routeName: 'inventario',
+              ),
+              CardItem(
+                title: 'Proveedores',
+                imagePath: 'assets/gestionProd.png',
+                routeName: 'proveedores',
+              ),
+              CardItem(
+                title: 'Ventas',
+                imagePath: 'assets/gestionIns.png',
+                routeName: 'ventas',
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -163,7 +119,11 @@ class CardItem extends StatelessWidget {
   final String imagePath;
   final String routeName;
 
-  const CardItem({required this.title, required this.imagePath, required this.routeName});
+  const CardItem({
+    required this.title,
+    required this.imagePath,
+    required this.routeName,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -179,7 +139,7 @@ class CardItem extends StatelessWidget {
         ),
         margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         clipBehavior: Clip.antiAlias,
-        child:  Container(
+        child: Container(
           color: const Color.fromARGB(255, 4, 75, 134),
           height: 170,
           child: Column(
@@ -203,13 +163,18 @@ class CardItem extends StatelessWidget {
                   children: [
                     Text(
                       title,
-                      style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
                     ),
                     const SizedBox(height: 2),
                     const Text(
                       ' ',
-                      style: TextStyle(fontSize: 10),
-                      
+                      style: TextStyle(
+                        fontSize: 10,
+                      ),
                     ),
                   ],
                 ),
@@ -221,3 +186,4 @@ class CardItem extends StatelessWidget {
     );
   }
 }
+
