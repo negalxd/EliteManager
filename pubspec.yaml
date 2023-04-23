@@ -41,6 +41,8 @@ dependencies:
   calendar_date_picker2: ^0.5.2
   intl: ^0.17.0
   shared_preferences: ^2.1.0
+  wave: ^0.2.2
+  path_provider: ^2.0.14
   
 
 dev_dependencies:

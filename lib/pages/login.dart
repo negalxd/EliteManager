@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:wave/wave.dart';
+import 'package:wave/config.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Config {
   static  String appName = "Empresa XYZ";
-  static  String apiURL = '192.168.1.3';
+  static  String apiURL = '192.168.1.4';
   static  const loginAPI = "Api/login/";
   static  const obtenertokenAPI = "Api/api-token-auth/";
 }
@@ -48,111 +51,133 @@ class _LoginPageState extends State<LoginPage> {
 
 
 @override
-Widget build(BuildContext context) {
-  return Scaffold(
-    resizeToAvoidBottomInset: false,
-    appBar: AppBar(
-      title: const Text('Login'),
-      actions: [
-        TextButton(
-          style: TextButton.styleFrom(
-            foregroundColor: const Color.fromARGB(255, 0, 0, 0),
-          ),
-          onPressed: () {
-            // Acción del botón de ayuda
-          },
-          child: const Text('Ayuda'),
+@override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      resizeToAvoidBottomInset: true,
+      appBar: AppBar(
+        title: Image.asset(
+          'assets/elitelogo.png',
+          height: kToolbarHeight * 0.8,
         ),
-      ],
-      elevation: 0,
-      backgroundColor: Colors.white,
-    ),
-    body: Padding(
-      padding: const EdgeInsets.all(5.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const SizedBox(height: 80),
-          const Text(
-            'Iniciar sesión',
-            style: TextStyle(
-              fontSize: 30,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 20),
-          Container(
-            margin: const EdgeInsets.all(10),
-            child: TextField(
-              controller: nameController,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(color: Color.fromARGB(255, 4, 75, 134)),
-                  borderRadius: BorderRadius.all(Radius.circular(5)),
-                ),
-                labelText: 'Nombre de usuario',
-                labelStyle: TextStyle(color: Color.fromARGB(255, 4, 75, 134)),
-                contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-              ),
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.all(10),
-            child: TextField(
-              obscureText: true,
-              controller: passwordController,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(color: Color.fromARGB(255, 4, 75, 134)),
-                  borderRadius: BorderRadius.all(Radius.circular(5)),
-                ),
-                labelText: 'Contraseña',
-                labelStyle: TextStyle(color: Color.fromARGB(255, 4, 75, 134)),
-                contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-              ),
-            ),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              login();
-            },
-            style: ElevatedButton.styleFrom(
-              foregroundColor: Colors.white,
-              backgroundColor: const Color.fromARGB(255, 4, 75, 134),
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(30)),
-              ),
-              minimumSize: const Size(0, 50),
-            ),
-            child: const Text('Iniciar sesión'),
-          ),
+        actions: [
           TextButton(
-            onPressed: () {
-              Navigator.pushNamed(context, 'forgot_password');
-            },
             style: TextButton.styleFrom(
-              foregroundColor: const Color.fromARGB(255, 4, 75, 134),
+              foregroundColor: const Color.fromARGB(255, 0, 0, 0),
             ),
-            child: const Text('¿Olvidaste tu contraseña?'),
-          ),
-          const Expanded(child: SizedBox()),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              height: 180,
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('assets/wave.png'),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
+            onPressed: () {
+              // Acción del botón de ayuda
+            },
+            child: const Text('Ayuda'),
           ),
         ],
+        elevation: 0,
+        backgroundColor: Colors.white,
       ),
-    ),
-  );
+      body: Stack(
+          children: [
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: WaveWidget(
+                config: CustomConfig(
+                  gradients: [
+                    [Colors.blue, Colors.lightBlue.shade200],
+                    [Colors.blue.shade800, Colors.lightBlue.shade400],
+                  ],
+                  durations: [35000, 19440],
+                  heightPercentages: [0.7, 0.8],
+                  blur: const MaskFilter.blur(BlurStyle.solid, 10),
+                ),
+                waveAmplitude: 0,
+                size: const Size(
+                  double.infinity,
+                  double.infinity,
+                ),
+              ),
+            ),
+          SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  //centrar el titulo
+                  const SizedBox(height: 20),
+                  const Center(
+                    child: Text(
+                      'Iniciar sesión',
+                      style: TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Container(
+                    margin: const EdgeInsets.all(10),
+                    child: TextField(
+                      controller: nameController,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Color.fromARGB(255, 4, 75, 134)),
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                        ),
+                        labelText: 'Nombre de usuario',
+                        labelStyle: TextStyle(color: Color.fromARGB(255, 4, 75, 134)),
+                        contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.all(10),
+                    child: TextField(
+                      obscureText: true,
+                      controller: passwordController,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Color.fromARGB(255, 4, 75, 134)),
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                        ),
+                        labelText: 'Contraseña',
+                        labelStyle: TextStyle(color: Color.fromARGB(255, 4, 75, 134)),
+                        contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                      ),
+                    ),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      login();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: Colors.white,
+                backgroundColor: const Color.fromARGB(255, 4, 75, 134),
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(30)),
+                ),
+                minimumSize: const Size(0, 50),
+              ),
+              child: const Text('Iniciar sesión'),
+            ),
+            const SizedBox(height: 10),
+            TextButton(
+              onPressed: () {
+                Navigator.pushNamed(context, 'forgot_password');
+              },
+              style: TextButton.styleFrom(
+                foregroundColor: const Color.fromARGB(255, 4, 75, 134),
+              ),
+              child: const Text('¿Olvidaste tu contraseña?'),
+            ),
+            ],
+          ),
+        ),
+      ),
+    ],  
+  ),  
+);  
 }
+
 
 
 
@@ -177,17 +202,18 @@ Widget build(BuildContext context) {
     };
     final res = await http.post(urllogin,
         headers: headers, body: jsonEncode(datosdelposibleusuario));
-    //final data = Map.from(jsonDecode(res.body));
+    final data = Map.from(jsonDecode(res.body));
     if (res.statusCode == 400) {
       showSnackbar("error");
       return;
     }
     if (res.statusCode != 200) {
       showSnackbar("Ha habido un error al obtener usuario y contraseña");
+      return;
     }
     final res2 = await http.post(urlobtenertoken,
         headers: headers, body: jsonEncode(datosdelposibleusuario));
-    final data2 = Map.from(jsonDecode(res2.body));
+    final data2 = jsonDecode(res2.body);
     if (res2.statusCode == 400) {
       showSnackbar("error");
       return;
@@ -196,6 +222,11 @@ Widget build(BuildContext context) {
       showSnackbar("Ha habido un error con el token");
     }
     final token = data2["token"];
+    final userid = data2["user_id"];
+    print(token);
+    print(userid);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('id', userid);
     final user = Usuario(
         username: nameController.text,
         password: passwordController.text,

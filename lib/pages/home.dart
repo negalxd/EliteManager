@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:elite_manager/pages/login.dart';
 
 class HomePage extends StatelessWidget {
   final List<String> _menuItems = [    'Inventarios',    'Proveedores',    'Ventas',  ];
@@ -20,7 +19,7 @@ class HomePage extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.person),
             onPressed: () {
-              Navigator.pushNamed(context, 'error');
+              Navigator.pushNamed(context, 'profile');
             },
           ),
         ],
@@ -29,17 +28,11 @@ class HomePage extends StatelessWidget {
       drawer: Drawer(
   child: Column(
     children: [
-      Container(
+      SizedBox(
         height: 150,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/gestionIns.png'),
-            fit: BoxFit.fitHeight,
-          ),
+        child: DrawerHeader(
+          child: Image.asset('assets/elitelogo.png'),
         ),
-      ),
-      const DrawerHeader(
-        child: Text('Elite Manager'),
       ),
       Expanded(
         child: ListView.builder(
