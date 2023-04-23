@@ -63,7 +63,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
           IconButton(
             icon: const Icon(Icons.person),
             onPressed: () {
-              Navigator.pushNamed(context, 'error');
+              Navigator.pushNamed(context, 'profile');
             },
           ),
         ],
