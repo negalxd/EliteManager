@@ -88,7 +88,7 @@ class _LoginPageState extends State<LoginPage> {
                   heightPercentages: [0.7, 0.8],
                   blur: const MaskFilter.blur(BlurStyle.solid, 10),
                 ),
-                waveAmplitude: 0,
+                waveAmplitude: 20,
                 size: const Size(
                   double.infinity,
                   double.infinity,
@@ -223,8 +223,8 @@ class _LoginPageState extends State<LoginPage> {
     }
     final token = data2["token"];
     final userid = data2["user_id"];
-    print(token);
-    print(userid);
+    // print(token);
+    // print(userid);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setInt('id', userid);
     final user = Usuario(
