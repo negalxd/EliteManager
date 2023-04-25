@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-
+import 'package:elite_manager/pages/config.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -31,11 +31,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
     // print('$id');
 
     final profileResponse = await http.get(
-      Uri.parse('http://192.168.1.4/Api/profiles/$id/'),
+      Uri.parse('http://${Configuracion.apiurl}/Api/profiles/$id/')
     );
     final profilenameResponse = await http.get(
-      Uri.parse('http://192.168.1.4/Api/user/$id/'),
-      headers: {'Authorization': 'Basic ${base64Encode(utf8.encode('negal:12345'))}'},
+      Uri.parse('http://${Configuracion.apiurl}/Api/user/$id/'),
+      headers: {'Authorization': 'Basic ${base64Encode(utf8.encode(Configuracion.superuser))}'},
     );
     final data1 = json.decode(profilenameResponse.body);
     setState(() {
@@ -76,7 +76,7 @@ Widget build(BuildContext context) {
         CircleAvatar(
           radius: 50,
           backgroundImage: _profileImageUrl.isNotEmpty
-    ? NetworkImage('http://192.168.1.4/$_profileImageUrl')
+    ? NetworkImage('http://${Configuracion.apiurl}/$_profileImageUrl')
     : const AssetImage('assets/defaultimage.png') as ImageProvider<Object>?,
         ),
         const SizedBox(height: 20),

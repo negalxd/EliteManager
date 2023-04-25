@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:elite_manager/pages/config.dart';
 
 class InsumosScreen extends StatefulWidget {
   @override
@@ -12,6 +13,7 @@ class _InsumosScreenState extends State<InsumosScreen> {
   List<Map<String, dynamic>> _insumos = [];
   List<Map<String, dynamic>> _imagen = [];
   List<Map<String, dynamic>> _filteredInsumos = [];
+  final Map<int, NetworkImage> _proveedorImagenes = {};
 
   @override
   void initState() {
@@ -23,12 +25,13 @@ class _InsumosScreenState extends State<InsumosScreen> {
   final utf8decoder = const Utf8Decoder();
 
   void _getInsumos() async {
-  final response = await http.get(Uri.parse('http://192.168.1.4/Api/insumos/'));
+  final response = await http.get(Uri.parse('http://${Configuracion.apiurl}/Api/insumos/'));
   final List<dynamic> responseData = json.decode(utf8decoder.convert(response.bodyBytes));
   setState(() {
     _insumos = responseData.cast<Map<String, dynamic>>();
     _filteredInsumos = _insumos.toList();
   });
+  print(_insumos);
 }
 
 
@@ -74,17 +77,18 @@ class _InsumosScreenState extends State<InsumosScreen> {
   }
 
   void _getImage() async {
-    final response = await http.get(Uri.parse('http://192.168.1.4/Api/prov-insumos/'));
-    final List<dynamic> responseData = json.decode(utf8decoder.convert(response.bodyBytes));
-    setState(() {
+  final response = await http.get(Uri.parse('http://${Configuracion.apiurl}/Api/prov-insumos/'));
+  final List<dynamic> responseData = json.decode(utf8decoder.convert(response.bodyBytes));
+  setState(() {
     _imagen = responseData.cast<Map<String, dynamic>>();
+    _proveedorImagenes.clear(); // Limpiar el mapa de imágenes para evitar la repetición de imágenes.
   });
-    print(_imagen);
-  }
+  print(_imagen);
+}
 
 
   void _deleteInsumo(Map<String, dynamic> insumo) async {
-  final response = await http.delete(Uri.parse('http://192.168.1.4/Api/insumos/${insumo['id']}/'));
+  final response = await http.delete(Uri.parse('http://${Configuracion.apiurl}/Api/insumos/${insumo['id']}/'));
   if (response.statusCode == 204) {
     setState(() {
       _insumos.remove(insumo);
@@ -140,7 +144,7 @@ Widget build(BuildContext context) {
                 ),
                 child: ListTile(
                 leading: CircleAvatar(
-                  backgroundImage: _getProveedorImage(_filteredInsumos[index]['proveedor']),
+                  backgroundImage: AssetImage('assets/defaultimage.png'),
                 ),
                 title: Text(insumo['prov_insumo_nombre']),
                 subtitle: Text(insumo['proveedor_nombre']),
@@ -162,11 +166,6 @@ Widget build(BuildContext context) {
       ],
     ),
   );
-}
-
-NetworkImage _getProveedorImage(int proveedor) {
-  var proveedorImagen = _imagen.firstWhere((imagen) => imagen['proveedor'] == proveedor);
-  return NetworkImage(proveedorImagen['image_insumo']);
 }
 
 }             

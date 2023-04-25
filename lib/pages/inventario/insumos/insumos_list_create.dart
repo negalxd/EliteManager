@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-
+import 'package:elite_manager/pages/config.dart';
 
 class AddInsumo extends StatefulWidget {
   @override
@@ -25,7 +25,7 @@ class _AddInsumoState extends State<AddInsumo> {
 
   void _getInsumos() async {
     final response =
-        await http.get(Uri.parse('http://192.168.1.4/Api/prov-insumos/'));
+        await http.get(Uri.parse('http://${Configuracion.apiurl}/Api/prov-insumos/'));
     final List<dynamic> responseData =
         json.decode(utf8decoder.convert(response.bodyBytes));
     setState(() {
@@ -36,7 +36,7 @@ class _AddInsumoState extends State<AddInsumo> {
 
   void _getProveedor() async {
     final response =
-        await http.get(Uri.parse('http://192.168.1.4/Api/proveedores/'));
+        await http.get(Uri.parse('http://${Configuracion.apiurl}/Api/proveedores/'));
     final List<dynamic> responseData =
         json.decode(utf8decoder.convert(response.bodyBytes));
     setState(() {
@@ -53,7 +53,7 @@ class _AddInsumoState extends State<AddInsumo> {
     return;
   }
 
-  final response = await http.post(Uri.parse('http://192.168.1.4/Api/insumos/'),
+  final response = await http.post(Uri.parse('http://${Configuracion.apiurl}/Api/insumos/'),
     headers: {'Content-Type': 'application/json'},
     body: jsonEncode({
       'proveedor': _selectedProveedorId,
@@ -136,153 +136,3 @@ class _AddInsumoState extends State<AddInsumo> {
 
 }
 
-
-// class AddInsumo extends StatefulWidget {
-//   @override
-//   _AddInsumoState createState() => _AddInsumoState();
-// }
-
-// class _AddInsumoState extends State<AddInsumo> {
-//   List<Map<String, dynamic>> _insumos = [];
-//   List<Map<String,  dynamic>> _proveedores = [];
-
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     _getInsumos();
-//     _getProveedor();
-//   }
-// final utf8decoder = const Utf8Decoder();
-//   void _getInsumos() async {
-//   final response = await http.get(Uri.parse('http://192.168.1.4/Api/prov-insumos/'));
-//   final List<dynamic> responseData = json.decode(utf8decoder.convert(response.bodyBytes));
-//   setState(() {
-//     _insumos = responseData.cast<Map<String, dynamic>>();
-//     print(_insumos);
-//   });
-// }
-
-// void _getProveedor() async {
-//   final response = await http.get(Uri.parse('http://192.168.1.4/Api/proveedores/'));
-//   final List<dynamic> responseData = json.decode(utf8decoder.convert(response.bodyBytes));
-//   setState(() {
-//     _proveedores = responseData.cast<Map<String, dynamic>>();
-//     print(_proveedores);
-//   });
-// }
-
-
-// //mostrar json obtenido por _getInsumos en el widget
-//   @override
-// Widget build(BuildContext context) {
-//   return Scaffold(
-//     appBar: AppBar(
-//       title: Text('Insumos'),
-//       centerTitle: true,
-//     ),
-//     body: ListView.builder(
-//       itemCount: _insumos.length,
-//       itemBuilder: (context, index) {
-//         return ListTile(
-//           // title: Text(_insumos[index]['id'].toString()),
-//           // title: Text(_insumos[index]['nombre'].toString()),
-//           // subtitle: Text(_proveedores[index]['nombre'].toString()),
-//         );
-//       },
-//     ),
-//   );
-// }
-        
-
-
-
-
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Scaffold(
-  //     appBar: AppBar(
-  //       title: Text('Añadir Categoria Insumo'),
-  //       centerTitle: true,
-  //     ),
-  //     resizeToAvoidBottomInset: true,
-  //     body: SingleChildScrollView(
-  //       child: Card(
-  //       margin: EdgeInsets.all(16),
-  //       color: Color.fromARGB(255, 255, 255, 255),
-  //       elevation: 8,
-  //       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-  //       child: Padding(
-  //         padding: EdgeInsets.all(16),
-  //         child: Form(
-  //           key: _formKey,
-  //           child: Column(
-  //             crossAxisAlignment: CrossAxisAlignment.stretch,
-  //             children: [
-  //               if (_image != null) ...[
-  //                 Container(
-  //                   decoration: BoxDecoration(
-  //                     borderRadius: BorderRadius.circular(8),
-  //                     color: Colors.white,
-  //                   ),
-  //                   height: 200,
-  //                   child: Image.file(_image!, fit: BoxFit.cover, width: double.infinity),
-  //                 ),
-  //                 SizedBox(height: 16),
-  //               ],
-  //               ElevatedButton.icon(
-  //                 onPressed: _pickImage,
-  //                 icon: Icon(Icons.add_photo_alternate, size: 30, color: Color.fromARGB(255, 4, 75, 134),),
-  //                 label: Text(
-  //                   'Añadir imagen',
-  //                   style: TextStyle(
-  //                     fontSize: 18,
-  //                     color: const Color.fromARGB(255, 4, 75, 134),
-  //                   ),
-  //                 ),
-  //                 style: ButtonStyle(
-  //                   backgroundColor: MaterialStateProperty.all<Color>(
-  //                     Color.fromARGB(255, 255, 255, 255),
-  //                   ),
-  //                 ),
-  //               ),
-  //               SizedBox(height: 20),
-  //               TextFormField(
-  //                 decoration: InputDecoration(
-  //                   labelText: 'Nombre insumo',
-  //                   border: OutlineInputBorder(
-  //                     borderSide: BorderSide(color: Color.fromARGB(255, 4, 75, 134)),
-  //                   ),
-  //                 ),
-  //                 validator: (value) {
-  //                   if (value!.isEmpty) {
-  //                     return 'Por favor ingrese el nombre del insumo';
-  //                   }
-  //                   return null;
-  //                 },
-  //                 onSaved: (value) {
-  //                   _categoriaName = value!;
-  //                 },
-  //               ),
-  //               SizedBox(height: 16),
-  //               ElevatedButton(
-  //                 onPressed: () {
-  //                   if (_formKey.currentState!.validate()) {
-  //                     _formKey.currentState!.save();
-                      
-  //                   }
-  //                 },
-  //                 style: ButtonStyle(
-  //                 backgroundColor: MaterialStateProperty.all<Color>(const Color.fromARGB(255, 4, 75, 134)),
-  //                 foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-  //                 ),
-  //                 child: Text('Guardar'),
-  //               ),
-  //             ],
-  //           ),
-  //         ),
-  //       ),
-  //     ),
-  //     ),
-  //   );
-  // }
