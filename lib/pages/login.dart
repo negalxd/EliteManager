@@ -4,13 +4,8 @@ import 'package:http/http.dart' as http;
 import 'package:wave/wave.dart';
 import 'package:wave/config.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:elite_manager/pages/config.dart';
 
-class Config {
-  static  String appName = "Empresa XYZ";
-  static  String apiURL = '192.168.1.4';
-  static  const loginAPI = "Api/login/";
-  static  const obtenertokenAPI = "Api/api-token-auth/";
-}
 class Usuario {
   String username;
   String password;
@@ -43,10 +38,10 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController passwordController = TextEditingController();
 
   //final urllogin = Uri.parse("http://192.168.1.108/api/login/");
-  final urllogin = Uri.http(Config.apiURL, Config.loginAPI);
+  final urllogin = Uri.http(Configuracion.apiurl, Configuracion.loginAPI);
 
   //final urlobtenertoken = Uri.parse("http://192.168.1.108/api/api-token-auth/");
-  final urlobtenertoken = Uri.http(Config.apiURL, Config.obtenertokenAPI);
+  final urlobtenertoken = Uri.http(Configuracion.apiurl, Configuracion.obtenertokenAPI);
   final headers = {"Content-Type": "application/json;charset=UTF-8"};
 
 
@@ -88,7 +83,7 @@ class _LoginPageState extends State<LoginPage> {
                   heightPercentages: [0.7, 0.8],
                   blur: const MaskFilter.blur(BlurStyle.solid, 10),
                 ),
-                waveAmplitude: 0,
+                waveAmplitude: 20,
                 size: const Size(
                   double.infinity,
                   double.infinity,
@@ -223,14 +218,11 @@ class _LoginPageState extends State<LoginPage> {
     }
     final token = data2["token"];
     final userid = data2["user_id"];
-    print(token);
-    print(userid);
+    print(data2);
+    // print(token);
+    // print(userid);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setInt('id', userid);
-    final user = Usuario(
-        username: nameController.text,
-        password: passwordController.text,
-        token: token);
     // ignore: use_build_context_synchronously
     //Navigator.push(context,MaterialPageRoute(builder: (context) => Home()),);
     // ignore: use_build_context_synchronously

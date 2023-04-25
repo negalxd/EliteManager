@@ -34,7 +34,7 @@ class _SuppliesLoteScreenState extends State<SuppliesLoteScreen> {
           IconButton(
             icon: const Icon(Icons.person),
             onPressed: () {
-              Navigator.pushNamed(context, 'error');
+              Navigator.pushNamed(context, 'profile');
             },
           ),
         ],
@@ -124,3 +124,28 @@ class _SuppliesLoteScreenState extends State<SuppliesLoteScreen> {
     );
   }
 }
+
+
+// class DetalleInsumo extends StatelessWidget {
+//   final Map<String, dynamic> insumo;
+
+//   const DetalleInsumo({Key? key, required this.insumo}) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text(insumo['prov_insumo_nombre']),
+//       ),
+//       body: Center(
+//         child: Column(
+//           mainAxisAlignment: MainAxisAlignment.center,
+//           children: [
+//             Text('Proveedor: ${insumo['proveedor_nombre']}'),
+//             Text('Cantidad disponible: ${insumo['cantidad']}'),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }

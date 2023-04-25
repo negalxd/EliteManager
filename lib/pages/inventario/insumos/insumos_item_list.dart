@@ -1,129 +1,171 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:elite_manager/pages/config.dart';
 
-class SuppliesItemScreen extends StatefulWidget {
-  const SuppliesItemScreen({Key? key}) : super(key: key);
-
+class InsumosScreen extends StatefulWidget {
   @override
-  _SuppliesItemScreenState createState() => _SuppliesItemScreenState();
+  _InsumosScreenState createState() => _InsumosScreenState();
 }
 
-class _SuppliesItemScreenState extends State<SuppliesItemScreen> {
-  List<String> _listItems = [    'Salchichas Veganas',    'Salchichas de pollo',    'Salchichas Sureñas',    'Salchichas de cerdo',    'Salchichas de res'  ];
-
-  List<String> _filteredItems = [];
-
-  TextEditingController _searchController = TextEditingController();
+class _InsumosScreenState extends State<InsumosScreen> {
+  final TextEditingController _searchController = TextEditingController();
+  List<Map<String, dynamic>> _insumos = [];
+  List<Map<String, dynamic>> _imagen = [];
+  List<Map<String, dynamic>> _filteredInsumos = [];
+  final Map<int, NetworkImage> _proveedorImagenes = {};
 
   @override
   void initState() {
     super.initState();
-    _filteredItems = _listItems;
+    _getInsumos();
+    _getImage();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('Insumos disponibles'),
-          ],
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.person),
-            onPressed: () {
-              Navigator.pushNamed(context, 'error');
-            },
-          ),
-        ],
-      ),
-      body: Column(
-        children: [
-          Container(
-            margin: const EdgeInsets.only(bottom: 10.0),
-            padding: const EdgeInsets.all(10.0),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _searchController,
-                    onChanged: (value) {
-                      setState(() {
-                        _filteredItems = _listItems
-                            .where((item) =>
-                                item.toLowerCase().contains(value.toLowerCase()))
-                            .toList();
-                      });
-                    },
-                    decoration: InputDecoration(
-                      hintText: 'Buscar',
-                      prefixIcon: Icon(Icons.search),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                    ),
-                  ),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.clear),
-                  onPressed: () {
-                    setState(() {
-                      _searchController.text = '';
-                      _filteredItems = _listItems;
-                    });
-                  },
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: _filteredItems.length,
-              itemBuilder: (context, index) {
-                return InkWell(
-                  onTap: () {
-                    Navigator.pushNamed(context, 'insumositemlote');
-                  },
-                  child: Card(
-                    margin: const EdgeInsets.symmetric(
-                        horizontal: 10.0, vertical: 5.0),
-                    child: ListTile(
-                      leading: Container(
-                        width: 50.0,
-                        child: Image.asset('assets/gestionProd.png'),
-                      ),
-                      title: Text(_filteredItems[index]),
-                      subtitle: Text('Stock del insumo ${index + 1}'),
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-          Container(
-            width: double.infinity,
-            margin: const EdgeInsets.symmetric(horizontal: 100.0),
-            child: ElevatedButton(
+  final utf8decoder = const Utf8Decoder();
+
+  void _getInsumos() async {
+  final response = await http.get(Uri.parse('http://${Configuracion.apiurl}/Api/insumos/'));
+  final List<dynamic> responseData = json.decode(utf8decoder.convert(response.bodyBytes));
+  setState(() {
+    _insumos = responseData.cast<Map<String, dynamic>>();
+    _filteredInsumos = _insumos.toList();
+  });
+  print(_insumos);
+}
+
+
+  void _filterInsumos(String query) {
+    setState(() {
+      _filteredInsumos = _insumos
+          .where((insumo) =>
+              insumo['prov_insumo_nombre']
+                  .toLowerCase()
+                  .contains(query.toLowerCase()) ||
+              insumo['proveedor_nombre']
+                  .toLowerCase()
+                  .contains(query.toLowerCase()))
+          .toList();
+    });
+  }
+
+  void _confirmDelete(Map<String, dynamic> insumo) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Eliminar insumo"),
+          content: Text("¿Está seguro que desea eliminar el insumo ${insumo['prov_insumo_nombre']}?"),
+          actions: [
+            TextButton(
+              child: const Text("Cancelar"),
               onPressed: () {
-                Navigator.pushNamed(context, 'insumositemcreate');
+                Navigator.of(context).pop();
               },
-              style: ElevatedButton.styleFrom(
-                foregroundColor: const Color.fromARGB(255, 255, 255, 255),
-                backgroundColor: const Color.fromARGB(255, 4, 75, 134),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
-              ),
-              child: const Text('Agregar item'),
             ),
-          ),
-        ],
-      ),
+            TextButton(
+              child: const Text("Eliminar"),
+              onPressed: () {
+                _deleteInsumo(insumo);
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
+
+  void _getImage() async {
+  final response = await http.get(Uri.parse('http://${Configuracion.apiurl}/Api/prov-insumos/'));
+  final List<dynamic> responseData = json.decode(utf8decoder.convert(response.bodyBytes));
+  setState(() {
+    _imagen = responseData.cast<Map<String, dynamic>>();
+    _proveedorImagenes.clear(); // Limpiar el mapa de imágenes para evitar la repetición de imágenes.
+  });
+  print(_imagen);
 }
+
+
+  void _deleteInsumo(Map<String, dynamic> insumo) async {
+  final response = await http.delete(Uri.parse('http://${Configuracion.apiurl}/Api/insumos/${insumo['id']}/'));
+  if (response.statusCode == 204) {
+    setState(() {
+      _insumos.remove(insumo);
+      _filteredInsumos = _insumos;
+    });
+  //mostrar Snack de confirmacion de eliminacion
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text('El insumo ${insumo['prov_insumo_nombre']} ha sido eliminado correctamente'),
+    ));
+  } else {
+    print('Error al eliminar el insumo');
+  }
+}
+
+  @override
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(
+      title: const Text('Insumos disponibles'),
+    ),
+    body: Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: TextField(
+            controller: _searchController,
+            onChanged: _filterInsumos,
+            decoration: InputDecoration(
+              hintText: 'Buscar insumos',
+              prefixIcon: const Icon(Icons.search),
+              suffixIcon: IconButton(
+                icon: Icon(Icons.add_box),
+                onPressed: () {
+                  Navigator.pushNamed(context, 'insumoslistcreate');
+                },
+              ),
+            ),
+          ),
+        ),
+        Expanded(
+          child: ListView.builder(
+            itemCount: _filteredInsumos.length,
+            itemBuilder: (BuildContext context, int index) {
+              final insumo = _filteredInsumos[index];
+              return Container(
+                margin: const EdgeInsets.all(8.0),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Colors.grey.shade300,
+                    width: 1.0,
+                  ),
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                child: ListTile(
+                leading: CircleAvatar(
+                  backgroundImage: AssetImage('assets/defaultimage.png'),
+                ),
+                title: Text(insumo['prov_insumo_nombre']),
+                subtitle: Text(insumo['proveedor_nombre']),
+                trailing: IconButton(
+                  icon: Icon(Icons.delete),
+                  color: Color.fromARGB(255, 182, 30, 19),
+                  onPressed: () {
+                    _confirmDelete(insumo);
+                  },
+                ),
+                onTap: () {
+                  Navigator.pushNamed(context, 'insumositemlote');
+                },
+              ),
+              );
+            },
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+}             

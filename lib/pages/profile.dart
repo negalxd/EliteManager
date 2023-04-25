@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-
+import 'package:elite_manager/pages/config.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -28,14 +28,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
     //shared preferences
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int? id = prefs.getInt('id');
-    print('$id');
+    // print('$id');
 
     final profileResponse = await http.get(
-      Uri.parse('http://192.168.1.4/Api/profiles/$id/'),
+      Uri.parse('http://${Configuracion.apiurl}/Api/profiles/$id/')
     );
     final profilenameResponse = await http.get(
-      Uri.parse('http://192.168.1.4/Api/user/$id/'),
-      headers: {'Authorization': 'Basic ${base64Encode(utf8.encode('negal:12345'))}'},
+      Uri.parse('http://${Configuracion.apiurl}/Api/user/$id/'),
+      headers: {'Authorization': 'Basic ${base64Encode(utf8.encode(Configuracion.superuser))}'},
     );
     final data1 = json.decode(profilenameResponse.body);
     setState(() {
@@ -44,11 +44,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     final data2 = json.decode(profileResponse.body);
     if (data2 is Map) {
-      setState(() {
-        _profileImageUrl = data2['image_profile'];
-    });
+      final profileImageUrl = data2['image_profile']?.toString();
+      if (profileImageUrl != null) {
+        setState(() {
+          _profileImageUrl = profileImageUrl;
+        });
+      } else {
+        // Manejar el caso de error
+        print('Error: la clave "image_profile" no existe en el mapa');
+      }
     } else {
-    // Manejar el caso de error
+      // Manejar el caso de error
       print('Error: data2 no es un objeto');
     }
   }
@@ -59,22 +65,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
 Widget build(BuildContext context) {
   return Scaffold(
     appBar: AppBar(
-      title: Text('Perfil'),
+      title: const Text('Perfil'),
     ),
     body: 
     Center(
       child: 
       Column(
       children: [
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
         CircleAvatar(
           radius: 50,
-          backgroundImage: _profileImageUrl.isNotEmpty ? NetworkImage('http://192.168.1.4/' + _profileImageUrl) : null,
+          backgroundImage: _profileImageUrl.isNotEmpty
+    ? NetworkImage('http://${Configuracion.apiurl}/$_profileImageUrl')
+    : const AssetImage('assets/defaultimage.png') as ImageProvider<Object>?,
         ),
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
         Text(
           _username,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
           ),
