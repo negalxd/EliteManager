@@ -11,15 +11,14 @@ class InsumosScreen extends StatefulWidget {
 class _InsumosScreenState extends State<InsumosScreen> {
   final TextEditingController _searchController = TextEditingController();
   List<Map<String, dynamic>> _insumos = [];
-  List<Map<String, dynamic>> _imagen = [];
+
   List<Map<String, dynamic>> _filteredInsumos = [];
-  final Map<int, NetworkImage> _proveedorImagenes = {};
+
 
   @override
   void initState() {
     super.initState();
     _getInsumos();
-    _getImage();
   }
 
   final utf8decoder = const Utf8Decoder();
@@ -31,7 +30,7 @@ class _InsumosScreenState extends State<InsumosScreen> {
     _insumos = responseData.cast<Map<String, dynamic>>();
     _filteredInsumos = _insumos.toList();
   });
-  print(_insumos);
+  print(_filteredInsumos);
 }
 
 
@@ -76,17 +75,6 @@ class _InsumosScreenState extends State<InsumosScreen> {
     );
   }
 
-  void _getImage() async {
-  final response = await http.get(Uri.parse('http://${Configuracion.apiurl}/Api/prov-insumos/'));
-  final List<dynamic> responseData = json.decode(utf8decoder.convert(response.bodyBytes));
-  setState(() {
-    _imagen = responseData.cast<Map<String, dynamic>>();
-    _proveedorImagenes.clear(); // Limpiar el mapa de imágenes para evitar la repetición de imágenes.
-  });
-  print(_imagen);
-}
-
-
   void _deleteInsumo(Map<String, dynamic> insumo) async {
   final response = await http.delete(Uri.parse('http://${Configuracion.apiurl}/Api/insumos/${insumo['id']}/'));
   if (response.statusCode == 204) {
@@ -103,7 +91,7 @@ class _InsumosScreenState extends State<InsumosScreen> {
   }
 }
 
-  @override
+@override
 Widget build(BuildContext context) {
   return Scaffold(
     appBar: AppBar(
@@ -133,21 +121,26 @@ Widget build(BuildContext context) {
             itemCount: _filteredInsumos.length,
             itemBuilder: (BuildContext context, int index) {
               final insumo = _filteredInsumos[index];
-              return Container(
-                margin: const EdgeInsets.all(8.0),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.grey.shade300,
-                    width: 1.0,
-                  ),
-                  borderRadius: BorderRadius.circular(8.0),
+            return Container(
+              margin: const EdgeInsets.all(8.0),
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.grey.shade300,
+                  width: 1.0,
                 ),
-                child: ListTile(
-                leading: CircleAvatar(
-                  backgroundImage: AssetImage('assets/defaultproducto.jpg'),
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              child: ListTile(
+              leading: CircleAvatar(
+                child: FadeInImage(
+                  placeholder: const AssetImage('assets/Loading_icon.gif'),
+                  image: insumo['image_insumo'] != null ? NetworkImage(insumo['image_insumo']) : const AssetImage('assets/defaultproducto.jpg') as ImageProvider,
+                  fit: BoxFit.cover,
                 ),
+              ),
+
                 title: Text(insumo['prov_insumo_nombre']),
-                subtitle: Text(insumo['proveedor_nombre']),
+                subtitle: Text('${insumo['proveedor_nombre']}'),
                 trailing: IconButton(
                   icon: Icon(Icons.delete),
                   color: Color.fromARGB(255, 182, 30, 19),
@@ -159,7 +152,7 @@ Widget build(BuildContext context) {
                   Navigator.pushNamed(context, 'insumositemlote');
                 },
               ),
-              );
+            );
             },
           ),
         ),
@@ -167,5 +160,6 @@ Widget build(BuildContext context) {
     ),
   );
 }
+
 
 }             
