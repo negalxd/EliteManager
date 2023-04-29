@@ -36,6 +36,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   TextEditingController nameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  bool _isObscure = true;
 
   //final urllogin = Uri.parse("http://192.168.1.108/api/login/");
   final urllogin = Uri.http(Configuracion.apiurl, Configuracion.loginAPI);
@@ -127,16 +128,24 @@ class _LoginPageState extends State<LoginPage> {
                   Container(
                     margin: const EdgeInsets.all(10),
                     child: TextField(
-                      obscureText: true,
+                      obscureText: _isObscure,
                       controller: passwordController,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Color.fromARGB(255, 4, 75, 134)),
-                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                          borderSide: const BorderSide(color: Color.fromARGB(255, 4, 75, 134)),
+                          borderRadius: const BorderRadius.all(Radius.circular(5)),
                         ),
                         labelText: 'Contraseña',
-                        labelStyle: TextStyle(color: Color.fromARGB(255, 4, 75, 134)),
-                        contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                        labelStyle: const TextStyle(color: Color.fromARGB(255, 4, 75, 134)),
+                        contentPadding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              _isObscure = !_isObscure;
+                            });
+                          },
+                          icon: Icon(_isObscure ? Icons.visibility_off : Icons.visibility),
+                        ),
                       ),
                     ),
                   ),
