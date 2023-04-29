@@ -30,7 +30,6 @@ class _InsumosScreenState extends State<InsumosScreen> {
     _insumos = responseData.cast<Map<String, dynamic>>();
     _filteredInsumos = _insumos.toList();
   });
-  print(_filteredInsumos);
 }
 
 
@@ -83,6 +82,7 @@ class _InsumosScreenState extends State<InsumosScreen> {
       _filteredInsumos = _insumos;
     });
   //mostrar Snack de confirmacion de eliminacion
+  // ignore: use_build_context_synchronously
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text('El insumo ${insumo['prov_insumo_nombre']} ha sido eliminado correctamente'),
     ));
@@ -108,7 +108,7 @@ Widget build(BuildContext context) {
               hintText: 'Buscar insumos',
               prefixIcon: const Icon(Icons.search),
               suffixIcon: IconButton(
-                icon: Icon(Icons.add_box),
+                icon: const Icon(Icons.add_box),
                 onPressed: () {
                   Navigator.pushNamed(context, 'insumoslistcreate');
                 },
@@ -142,8 +142,8 @@ Widget build(BuildContext context) {
                 title: Text(insumo['prov_insumo_nombre']),
                 subtitle: Text('${insumo['proveedor_nombre']}'),
                 trailing: IconButton(
-                  icon: Icon(Icons.delete),
-                  color: Color.fromARGB(255, 182, 30, 19),
+                  icon: const Icon(Icons.delete),
+                  color: const Color.fromARGB(255, 182, 30, 19),
                   onPressed: () {
                     _confirmDelete(insumo);
                   },
