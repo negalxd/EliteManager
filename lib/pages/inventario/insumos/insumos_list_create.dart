@@ -128,7 +128,10 @@ class _AddInsumoState extends State<AddInsumo> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _addInsumo,
+        onPressed: () {
+          _addInsumo();
+          Navigator.of(context).pop();
+        },
         child: Icon(Icons.add),
       ),
     );
