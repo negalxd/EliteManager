@@ -144,7 +144,7 @@ Widget build(BuildContext context) {
                 ),
                 child: ListTile(
                 leading: CircleAvatar(
-                  backgroundImage: AssetImage('assets/defaultimage.png'),
+                  backgroundImage: AssetImage('assets/defaultproducto.jpg'),
                 ),
                 title: Text(insumo['prov_insumo_nombre']),
                 subtitle: Text(insumo['proveedor_nombre']),

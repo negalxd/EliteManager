@@ -217,8 +217,8 @@ class _LoginPageState extends State<LoginPage> {
       showSnackbar("Ha habido un error con el token");
     }
     final token = data2["token"];
-    final userid = data2["user_id"];
-    print(data2);
+    final userid = data["user_id"];
+    print(userid);
     // print(token);
     // print(userid);
     SharedPreferences prefs = await SharedPreferences.getInstance();
