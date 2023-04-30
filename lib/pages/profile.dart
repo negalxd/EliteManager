@@ -40,7 +40,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
       Uri.parse('http://${Configuracion.apiurl}/Api/user/$id/'),
       headers: {'Authorization': 'Basic ${base64Encode(utf8.encode(Configuracion.superuser))}'},
     );
-    final data1 = json.decode(profilenameResponse.body);
+    const utf8decoder = Utf8Decoder();
+    // decodificar con utf8.decode
+    final data1 = json.decode(utf8decoder.convert(profilenameResponse.bodyBytes));
+
+    
     setState(() {
       _username = data1['username'];
       //comprobar si el nombre está vacío
