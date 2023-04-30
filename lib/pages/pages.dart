@@ -5,6 +5,7 @@ export 'package:elite_manager/pages/login.dart';
 export 'package:elite_manager/pages/forgot_password.dart';
 export 'package:elite_manager/pages/profile.dart';
 export 'package:elite_manager/pages/config.dart';
+export 'package:elite_manager/pages/help.dart';
 ////////////////////////pages modules//////////////////////////
 export 'package:elite_manager/pages/inventario/inventario.dart';
 export 'package:elite_manager/pages/proveedores/proveedores.dart';

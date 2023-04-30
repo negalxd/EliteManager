@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:elite_manager/theme/my_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:elite_manager/pages/config.dart';
@@ -16,6 +17,8 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   String _username = '';
+  String _name = '';
+  String _email = '';
   String _profileImageUrl = '';
 
   @override
@@ -40,6 +43,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final data1 = json.decode(profilenameResponse.body);
     setState(() {
       _username = data1['username'];
+      //comprobar si el nombre está vacío
+      if (data1['first_name'] == '' || data1['last_name'] == '') {
+        _name = 'Sin nombre';
+      } else {
+        _name = '${data1['first_name']} ${data1['last_name']}';
+      }
+      //comprobar si el correo está vacío
+      if (data1['email'] == '') {
+        _email = 'Sin correo';
+      } else {
+        _email = '${data1['email']}';
+      }
     });
 
     final data2 = json.decode(profileResponse.body);
@@ -67,31 +82,82 @@ Widget build(BuildContext context) {
     appBar: AppBar(
       title: const Text('Perfil'),
     ),
-    body: 
-    Center(
-      child: 
-      Column(
-      children: [
-        const SizedBox(height: 20),
-        CircleAvatar(
-          radius: 50,
-          backgroundImage: _profileImageUrl.isNotEmpty
-    ? NetworkImage('http://${Configuracion.apiurl}/$_profileImageUrl')
-    : const AssetImage('assets/defaultimage.png') as ImageProvider<Object>?,
-        ),
-        const SizedBox(height: 20),
-        Text(
-          _username,
-          style: const TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
+    body: Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const SizedBox(height: 10),
+          Card(
+            margin: const EdgeInsets.all(10),
+            color: Colors.white,
+            elevation: 10,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const SizedBox(height: 20),
+                CircleAvatar(
+                  radius: 150,
+                  backgroundImage: _profileImageUrl.isNotEmpty
+                      ? NetworkImage('http://${Configuracion.apiurl}/$_profileImageUrl')
+                      : const AssetImage('assets/defaultimage.png') as ImageProvider<Object>?,
+                ),
+                const SizedBox(height: 20),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 150, vertical: 10),
+                  decoration: BoxDecoration(
+                    color: const Color.fromRGBO(255, 255, 255, 1),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Text(
+                    _username,
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
+                  decoration: BoxDecoration(
+                    color: Color.fromRGBO(255, 255, 255, 1),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Text(
+                    _name,
+                    style: const TextStyle(
+                      fontSize: 15,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
+                  decoration: BoxDecoration(
+                    color: Color.fromRGBO(255, 255, 255, 1),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Text(
+                    _email,
+                    style: const TextStyle(
+                      fontSize: 15,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+              ],
+            ),
           ),
-        ),
-      ],
-    ),
+        ],
+      ),
     ),
   );
 }
+
+
+
+
 
 }
 

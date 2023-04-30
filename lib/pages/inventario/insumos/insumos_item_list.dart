@@ -53,7 +53,7 @@ class _InsumosScreenState extends State<InsumosScreen> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text("Eliminar insumo"),
-          content: Text("¿Está seguro que desea eliminar el insumo ${insumo['prov_insumo_nombre']}?"),
+          content: Text("¿Está seguro que desea eliminar el insumo ${insumo['prov_insumo_nombre']}?, esta acción no se puede deshacer."),
           actions: [
             TextButton(
               child: const Text("Cancelar"),
@@ -62,7 +62,10 @@ class _InsumosScreenState extends State<InsumosScreen> {
               },
             ),
             TextButton(
-              child: const Text("Eliminar"),
+              child: const Text(
+                "Eliminar",
+                style: TextStyle(color: Colors.red),
+              ),
               onPressed: () {
                 _deleteInsumo(insumo);
                 Navigator.of(context).pop();

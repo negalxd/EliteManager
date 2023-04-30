@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class MyTheme {
-  static const Color primary = Color.fromRGBO(0, 0, 255, 1);
+  static const Color primary = Color.fromRGBO(8, 76, 132, 1);
   static final ThemeData mytheme = ThemeData(
     useMaterial3: true,
     primaryColor: primary,
@@ -13,7 +13,13 @@ class MyTheme {
       titleTextStyle: TextStyle(color: Color.fromARGB(255, 0, 0, 0), fontSize: 20),
       elevation: 0,
     ),
-    inputDecorationTheme: InputDecorationTheme(
+
+    floatingActionButtonTheme: const FloatingActionButtonThemeData(
+      backgroundColor: Color.fromRGBO(8, 76, 132, 1),
+      foregroundColor: Colors.white,
+    ),
+
+    inputDecorationTheme: const InputDecorationTheme(
       border: OutlineInputBorder(
         borderSide: BorderSide(color: Color.fromARGB(255, 4, 75, 134), width: 2.0),
       ),
@@ -22,5 +28,6 @@ class MyTheme {
       ),
       labelStyle: TextStyle(color: Color.fromARGB(255, 4, 75, 134)),
     ),
+
   );
 }

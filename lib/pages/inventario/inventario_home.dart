@@ -32,6 +32,7 @@ class InventoryScreen extends StatelessWidget {
                 Navigator.pushNamed(context, 'productoshome');
               },
               child: Card(
+                color: Colors.white, // hay que ponerle esto a cada card que funcione de fondo
                 elevation: 6,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
