@@ -47,7 +47,6 @@ class _LoginPageState extends State<LoginPage> {
 
 
 @override
-@override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -62,7 +61,7 @@ class _LoginPageState extends State<LoginPage> {
               foregroundColor: const Color.fromARGB(255, 0, 0, 0),
             ),
             onPressed: () {
-              // Acción del botón de ayuda
+              Navigator.pushNamed(context, 'help');
             },
             child: const Text('Ayuda'),
           ),
@@ -81,8 +80,8 @@ class _LoginPageState extends State<LoginPage> {
                     [Colors.blue.shade800, Colors.lightBlue.shade400],
                   ],
                   durations: [35000, 19440],
-                  heightPercentages: [0.7, 0.8],
-                  blur: const MaskFilter.blur(BlurStyle.solid, 10),
+                  heightPercentages: [0.8, 0.87],
+                  blur: const MaskFilter.blur(BlurStyle.solid, 5),
                 ),
                 waveAmplitude: 20,
                 size: const Size(
@@ -178,7 +177,7 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     ],  
-  ),  
+    ),
 );  
 }
 

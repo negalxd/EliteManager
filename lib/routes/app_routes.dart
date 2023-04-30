@@ -16,6 +16,7 @@ class AppRoutes {
     'proveedores': (BuildContext context) => const ProvidersScreen(),
     'ventas': (BuildContext context) => const SalesScreen(),
     'profile': (BuildContext context) => const ProfileScreen(userId: 1,),
+    'help': (BuildContext context) => const HelpScreen(),
     ///////////////////////////insumos///////////////////////////////
     // 'insumos': (BuildContext context) => const SuppliesScreen(),
     'insumoslist': (BuildContext context) => InsumosScreen(),
