@@ -30,6 +30,7 @@ class _InsumosScreenState extends State<InsumosScreen> {
     _insumos = responseData.cast<Map<String, dynamic>>();
     _filteredInsumos = _insumos.toList();
   });
+  print(_filteredInsumos);
 }
 
 

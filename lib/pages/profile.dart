@@ -93,7 +93,7 @@ Widget build(BuildContext context) {
         children: [
           const SizedBox(height: 10),
           Card(
-            margin: const EdgeInsets.all(10),
+            margin: const EdgeInsets.symmetric(horizontal: 20),
             color: Colors.white,
             elevation: 10,
             child: Column(
@@ -108,7 +108,7 @@ Widget build(BuildContext context) {
                 ),
                 const SizedBox(height: 20),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 150, vertical: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 70, vertical: 10),
                   decoration: BoxDecoration(
                     color: const Color.fromRGBO(255, 255, 255, 1),
                     borderRadius: BorderRadius.circular(10),
@@ -123,7 +123,7 @@ Widget build(BuildContext context) {
                 ),
                 const SizedBox(height: 20),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 70, vertical: 10),
                   decoration: BoxDecoration(
                     color: Color.fromRGBO(255, 255, 255, 1),
                     borderRadius: BorderRadius.circular(10),
@@ -137,7 +137,7 @@ Widget build(BuildContext context) {
                 ),
                 const SizedBox(height: 20),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 70, vertical: 10),
                   decoration: BoxDecoration(
                     color: Color.fromRGBO(255, 255, 255, 1),
                     borderRadius: BorderRadius.circular(10),
