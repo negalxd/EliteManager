@@ -1,6 +1,5 @@
 // Aqui se importan los packages del archivo de rutas de cada carpeta
 import 'package:elite_manager/pages/inventario/gestion_de_productos/Categorias/categorias_list_create.dart';
-import 'package:elite_manager/pages/inventario/insumos/insumos_list_create.dart';
 import 'package:elite_manager/pages/pages.dart';
 import 'package:flutter/material.dart';
 

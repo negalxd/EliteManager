@@ -1,7 +1,18 @@
+import 'dart:convert';
+import 'config.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
-class ForgotPasswordScreen extends StatelessWidget {
-  const ForgotPasswordScreen({super.key});
+class ForgotPasswordScreen extends StatefulWidget {
+  const ForgotPasswordScreen({Key? key}) : super(key: key);
+
+  @override
+  _ForgotPasswordScreenState createState() => _ForgotPasswordScreenState();
+}
+
+class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
+  final _emailController = TextEditingController();
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +26,8 @@ class ForgotPasswordScreen extends StatelessWidget {
           children: [
             Container(
               margin: const EdgeInsets.all(20),
-              child: const TextField(
+              child: TextField(
+                controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
@@ -23,36 +35,60 @@ class ForgotPasswordScreen extends StatelessWidget {
                     borderRadius: BorderRadius.all(Radius.circular(5)),
                   ),
                   hintText: 'Correo electrónico',
-                  prefixIcon: Icon(Icons.email),
+                  prefixIcon: const Icon(Icons.email),
                 ),
               ),
             ),
             ElevatedButton(
-              onPressed: () {
-                // Acción del botón de enviar correo
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title:const Text('Correo enviado'),
-                      content:const Text('Se ha enviado un correo con las instrucciones para restablecer tu contraseña.'),
-                      actions: <Widget>[
-                        TextButton(
-                          child:const Text('OK'),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                      ],
-                    );
-                  },
-                );
-              },
-              child:const Text('Enviar correo'),
+              onPressed: _isLoading ? null : _sendResetPasswordEmail,
+              child: _isLoading
+                  ? const CircularProgressIndicator()
+                  : const Text('Enviar correo'),
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Future<void> _sendResetPasswordEmail() async {
+    final email = _emailController.text.trim();
+    if (email.isEmpty) {
+      _showSnackbar('Debes ingresar un correo electrónico');
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    final url = Uri.parse('http://${Configuracion.apiurl}/Api/reset-password/');
+    final headers = {'Content-Type': 'application/json'};
+    final body = jsonEncode({'email': email});
+
+    try {
+      final response = await http.post(url, headers: headers, body: body);
+      if (response.statusCode == 200) {
+        _showSnackbar('Se ha enviado un correo con las instrucciones para restablecer tu contraseña.');
+        // ignore: use_build_context_synchronously
+        Navigator.pop(context);
+      } else {
+        _showSnackbar('Error al enviar correo. Intenta de nuevo más tarde.');
+      }
+    } catch (e) {
+      _showSnackbar('Error al enviar correo. Intenta de nuevo más tarde.');
+    }
+
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
+  void _showSnackbar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        duration: const Duration(seconds: 3),
       ),
     );
   }
