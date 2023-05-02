@@ -43,6 +43,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     const utf8decoder = Utf8Decoder();
     // decodificar con utf8.decode
     final data1 = json.decode(utf8decoder.convert(profilenameResponse.bodyBytes));
+    print(data1);
 
     
     setState(() {
@@ -158,10 +159,6 @@ Widget build(BuildContext context) {
     ),
   );
 }
-
-
-
-
 
 }
 

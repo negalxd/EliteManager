@@ -205,13 +205,17 @@ class _LoginPageState extends State<LoginPage> {
     };
     final res = await http.post(urllogin,
         headers: headers, body: jsonEncode(datosdelposibleusuario));
+        if (res.statusCode == 503) {
+      showSnackbar("Error de servidor");
+      return;
+    }
     final data = Map.from(jsonDecode(res.body));
     if (res.statusCode == 400) {
-      showSnackbar("error");
+      showSnackbar("Error 404");
       return;
     }
     if (res.statusCode != 200) {
-      showSnackbar("Ha habido un error al obtener usuario y contraseña");
+      showSnackbar("Error al obtener usuario y contraseña");
       return;
     }
     final res2 = await http.post(urlobtenertoken,
@@ -222,11 +226,10 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
     if (res2.statusCode != 200) {
-      showSnackbar("Ha habido un error con el token");
+      showSnackbar("Error con el token");
     }
     final token = data2["token"];
     final userid = data["user_id"];
-    print(userid);
     // print(token);
     // print(userid);
     SharedPreferences prefs = await SharedPreferences.getInstance();
