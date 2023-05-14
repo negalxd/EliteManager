@@ -1,7 +1,9 @@
 import  'package:flutter/material.dart' ;
+import 'package:elite_manager/widgets/cards.dart';
+
 
 class SalesScreen extends StatelessWidget {
-  const SalesScreen({super.key});
+  const SalesScreen({Key? key});
 
   @override
   Widget build(BuildContext context) {
@@ -9,33 +11,30 @@ class SalesScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Ventas'),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.shopping_cart, size: 50),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                // Acción del botón
-              },
-              child: const Text('Gestión de Clientes'),
-            ),
-            const SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: () {
-                // Acción del botón
-              },
-              child: const Text('Gestión de ordenes de trabajo'),
-            ),
-            const SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: () {
-                // Acción del botón
-              },
-              child: const Text('Gestión de ventas'),
-            ),
-          ],
+      body: const Center(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CardItem(
+                title: 'Gestión de Clientes',
+                imagePath: 'assets/gestionInvent.png',
+                routeName: 'gestionClientes',
+              ),
+              const SizedBox(height: 10),
+              CardItem(
+                title: 'Gestión de Ordenes de Trabajo',
+                imagePath: 'assets/gestionIns.png',
+                routeName: 'gestionOrdenes',
+              ),
+              const SizedBox(height: 10),
+              CardItem(
+                title: 'Gestión de Ventas',
+                imagePath: 'assets/gestionProd.png',
+                routeName: 'gestionVentas',
+              ),
+            ],
+          ),
         ),
       ),
     );

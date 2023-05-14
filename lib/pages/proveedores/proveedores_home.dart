@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:elite_manager/widgets/cards.dart';
 
 class ProvidersScreen extends StatelessWidget {
   const ProvidersScreen({super.key});
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -9,28 +11,27 @@ class ProvidersScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Proveedores'),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.local_shipping, size: 50),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                // Acción del botón
-              },
-              child: const Text('Gestion de proveedores'),
-            ),
-            const SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: () {
-                // Acción del botón
-              },
-              child: const Text('Gestion de ordenes de compra'),
-            ),
-          ],
+      body: const Center(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CardItem(
+                title: 'Gestión de proveedores',
+                imagePath: 'assets/gestionProd.png',
+                routeName: 'listaprov',
+              ),
+              CardItem(
+                title: 'Gestión de órdenes de compra',
+                imagePath: 'assets/gestionIns.png',
+                routeName: 'gestion_ordenes_compra',
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 }
+
+

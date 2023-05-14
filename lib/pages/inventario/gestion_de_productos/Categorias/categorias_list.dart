@@ -71,10 +71,10 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
       body: Column(
         children: [
           Container(
-            margin: const EdgeInsets.only(bottom: 10.0),
-            padding: const EdgeInsets.all(10.0),
+            margin: const EdgeInsets.only(bottom: 7.0),
+            padding: const EdgeInsets.all(7.0),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10.0),
+              borderRadius: BorderRadius.circular(30.0),
             ),
             child: TextField(
               controller: _searchController,

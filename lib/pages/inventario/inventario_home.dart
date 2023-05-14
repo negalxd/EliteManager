@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:elite_manager/widgets/cards.dart';
 
 class InventoryScreen extends StatelessWidget {
   const InventoryScreen({Key? key});
@@ -6,7 +7,7 @@ class InventoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
+      appBar: AppBar(
         title: const Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -22,111 +23,23 @@ class InventoryScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const SizedBox(height: 20),
-            InkWell(
-              onTap: () {
-                Navigator.pushNamed(context, 'productoshome');
-              },
-              child: Card(
-                color: Colors.white, // hay que ponerle esto a cada card que funcione de fondo
-                elevation: 6,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                clipBehavior: Clip.antiAlias,
-                child: SizedBox(
-                  height: 200,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        height: 120,
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                          image: DecorationImage(
-                            image:AssetImage('assets/gestionProd.png'),
-                            fit: BoxFit.fitHeight,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 16.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Gestion de productos',
-                              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(height: 5),
-                            Text(
-                              ' ',
-                              style: TextStyle(fontSize: 15),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+      body: const Center(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CardItem(
+                title: 'Gestion de productos',
+                imagePath: 'assets/gestionProd.png',
+                routeName: 'productoshome',
               ),
-            ),
-            InkWell(
-              onTap: () {
-                Navigator.pushNamed(context, 'insumoslist');
-              },
-              child: Card(
-                elevation: 6,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                clipBehavior: Clip.antiAlias,
-                child: SizedBox(
-                  height: 200,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        height: 120,
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                          image: DecorationImage(
-                            image: AssetImage('assets/gestionIns.png'),
-                            fit: BoxFit.fitHeight,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 16.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Gestion de Insumos',
-                              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(height: 5),
-                            Text(
-                              ' ',
-                              style: TextStyle(fontSize: 15),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+              CardItem(
+                title: 'Gestion de Insumos',
+                imagePath: 'assets/gestionIns.png',
+                routeName: 'insumoslist',
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

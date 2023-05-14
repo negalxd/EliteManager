@@ -13,6 +13,10 @@ class MyTheme {
       titleTextStyle: TextStyle(color: Color.fromARGB(255, 0, 0, 0), fontSize: 20),
       elevation: 0,
     ),
+    drawerTheme: DrawerThemeData(
+      elevation: 0,
+      backgroundColor: Colors.white,
+    ),
 
     floatingActionButtonTheme: const FloatingActionButtonThemeData(
       backgroundColor: Color.fromRGBO(8, 76, 132, 1),

@@ -32,6 +32,7 @@ class AppRoutes {
     ///////////////////////////productos-Productos///////////////////////////////
     'productospag': (BuildContext context) => const ProductPagScreen(),
     ///////////////////////////
+    'listaprov': (BuildContext context) => Providerlist(),
   };
   
 
