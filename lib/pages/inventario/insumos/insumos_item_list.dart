@@ -112,6 +112,7 @@ Widget build(BuildContext context) {
               hintText: 'Buscar insumos',
               prefixIcon: const Icon(Icons.search),
               suffixIcon: IconButton(
+                color: Color.fromARGB(255, 4, 75, 134),
                 icon: const Icon(Icons.add_box),
                 onPressed: () {
                   Navigator.pushNamed(context, 'insumoslistcreate');
