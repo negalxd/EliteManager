@@ -26,6 +26,7 @@ void _addCategoria() async {
         'nombre': _categoriaProdName,
       }));
 
+    //eliminar contexto para que no se pueda regresar a la pantalla anterior
     Navigator.of(context).pop();
     Navigator.pushNamed(context, 'categorias');
 
@@ -77,7 +78,6 @@ void _addCategoria() async {
                 ElevatedButton(
                   onPressed: () {
                     _addCategoria();
-                    Navigator.of(context).pop();
                   },
                   style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color>(const Color.fromARGB(255, 4, 75, 134)),

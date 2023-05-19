@@ -17,8 +17,8 @@ class _EditCategoryProductWidgetState extends State<EditCategoryProductWidget> {
 
   Future<String> _fetchCategoriaName() async {
     final arguments = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
-    if (arguments != null && arguments.containsKey('producto_id') && arguments.containsKey('nombre_categoria')) {
-      idcategoria = arguments['producto_id'].toString();
+    if (arguments != null && arguments.containsKey('cat_id') && arguments.containsKey('nombre_categoria')) {
+      idcategoria = arguments['cat_id'].toString();
       _categoriaNameActual = arguments['nombre_categoria'].toString();
       print(idcategoria);
       print(_categoriaNameActual);
@@ -28,23 +28,26 @@ class _EditCategoryProductWidgetState extends State<EditCategoryProductWidget> {
 
   String _categoriaProdName = '';
 
-  void _updateCategoria() async {
-    if (_formKey.currentState!.validate()) {
-      _formKey.currentState!.save();
+void _updateCategoria() async {
+  if (_formKey.currentState!.validate()) {
+    _formKey.currentState!.save();
 
-      final response = await http.put(Uri.parse('http://${Configuracion.apiurl}/Api/producto-categorias/$idcategoria/'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'nombre': _categoriaProdName,
-        }));
+    final response = await http.put(Uri.parse('http://${Configuracion.apiurl}/Api/producto-categorias/$idcategoria/'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'nombre': _categoriaProdName,
+      }));
 
-      Navigator.of(context).pop();
-      Navigator.pushNamed(context, 'categorias');
+    final responseData = jsonDecode(response.body);
+    print(responseData);
 
-      final responseData = jsonDecode(response.body);
-      print(responseData);
-    }
+    //eliminar contexto para que no se pueda regresar a la pantalla anterior
+    Navigator.of(context).pop();
+
+    Navigator.pushNamed(context, 'categorias');
   }
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +103,6 @@ class _EditCategoryProductWidgetState extends State<EditCategoryProductWidget> {
                 ElevatedButton(
                   onPressed: () {
                     _updateCategoria();
-                    Navigator.of(context).pop();
                   },
                   style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color>(const Color.fromARGB(255, 4, 75, 134)),

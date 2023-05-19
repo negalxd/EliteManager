@@ -77,7 +77,7 @@ class _CategoriasScreenState extends State<CategoriasScreen> {
   }
 
   void _deleteCategoria(Map<String, dynamic> categoria) async {
-  final response = await http.delete(Uri.parse('http://${Configuracion.apiurl}/Api/producto-categorias/${categoria['producto_id']}/'));
+  final response = await http.delete(Uri.parse('http://${Configuracion.apiurl}/Api/producto-categorias/${categoria['cat_id']}/'));
   if (response.statusCode == 204) {
     setState(() {
       _categorias.remove(categoria);
@@ -110,6 +110,7 @@ Widget build(BuildContext context) {
               hintText: 'Buscar categorías',
               prefixIcon: const Icon(Icons.search),
               suffixIcon: IconButton(
+                color: Color.fromARGB(255, 4, 75, 134),
                 icon: const Icon(Icons.add_box),
                 onPressed: () {
                   Navigator.pushNamed(context, 'categoriaslistcreate');
@@ -146,7 +147,7 @@ Widget build(BuildContext context) {
                   context,
                   'categoriasedit',
                   arguments: {
-                    'producto_id': categoria['producto_id'],
+                    'cat_id': categoria['cat_id'],
                     'nombre_categoria': categoria['nombre'],
                   },
                 );
