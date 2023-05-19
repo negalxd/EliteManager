@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:elite_manager/theme/my_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:elite_manager/pages/config.dart';
