@@ -1,47 +1,74 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:elite_manager/pages/config.dart';
 
-class CategoriesScreen extends StatefulWidget {
-  const CategoriesScreen({Key? key}) : super(key: key);
-
+class CategoriasScreen extends StatefulWidget {
   @override
-  // ignore: library_private_types_in_public_api
-  _CategoriesScreenState createState() => _CategoriesScreenState();
+  _CategoriasScreenState createState() => _CategoriasScreenState();
 }
 
-class _CategoriesScreenState extends State<CategoriesScreen> {
-  List<String> _listItems = [    'Categoria 1',    'Categoria 2',    'Categoria 3',    'Item 4',    'Item 5',    'Item 6',    'Item 7',    'Item 8',    'Item 9',    'Item 10'  ];
+class _CategoriasScreenState extends State<CategoriasScreen> {
+  final TextEditingController _searchController = TextEditingController();
+  
+  List<Map<String, dynamic>> _categorias = [];
 
-  List<String> _filteredItems = [];
+  List<Map<String, dynamic>> _filteredCategorias = [];
 
-  TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _filteredItems = _listItems;
+    _getCategorias();
   }
 
-  void _deleteCategory(String category) {
+  final utf8decoder = const Utf8Decoder();
+
+  void _getCategorias() async {
+  final response = await http.get(Uri.parse('http://${Configuracion.apiurl}/Api/producto-categorias/'));
+  final List<dynamic> responseData = json.decode(utf8decoder.convert(response.bodyBytes));
+  setState(() {
+    _categorias = responseData.cast<Map<String, dynamic>>();
+    _filteredCategorias = _categorias.toList();
+  });
+  print(_filteredCategorias);
+}
+
+
+  void _filterCategorias(String query) {
+    setState(() {
+      _filteredCategorias = _categorias
+          .where((categoria) =>
+              categoria['nombre']
+                  .toLowerCase()
+                  .contains(query.toLowerCase()))
+          .toList();
+    });
+  }
+
+  void _confirmDelete(Map<String, dynamic> categoria) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Eliminar categoria'),
-          content: Text('¿Estás seguro de que quieres eliminar la categoría $category?'),
+          title: const Text("Eliminar categoría"),
+          content: Text("¿Está seguro que desea eliminar la categoría ${categoria['nombre']}?, esta acción no se puede deshacer."),
           actions: [
             TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Cancelar'),
+              child: const Text("Cancelar"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
             ),
             TextButton(
+              child: const Text(
+                "Eliminar",
+                style: TextStyle(color: Colors.red),
+              ),
               onPressed: () {
-                setState(() {
-                  _listItems.remove(category);
-                  _filteredItems = _listItems;
-                });
-                Navigator.pop(context);
+                Navigator.of(context).pop();
+                _deleteCategoria(categoria);
               },
-              child: const Text('Eliminar'),
             ),
           ],
         );
@@ -49,94 +76,90 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('Gestión de Categorias'),
-          ],
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.person),
-            onPressed: () {
-              Navigator.pushNamed(context, 'profile');
-            },
-          ),
-        ],
-      ),
-      body: Column(
-        children: [
-          Container(
-            margin: const EdgeInsets.only(bottom: 7.0),
-            padding: const EdgeInsets.all(7.0),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(30.0),
-            ),
-            child: TextField(
-              controller: _searchController,
-              onChanged: (value) {
-                setState(() {
-                  _filteredItems = _listItems
-                      .where((item) =>
-                          item.toLowerCase().contains(value.toLowerCase()))
-                      .toList();
-                });
-              },
-              decoration: const InputDecoration(
-                hintText: 'Buscar',
-                prefixIcon: Icon(Icons.search),
-              ),
-            ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: _filteredItems.length,
-              itemBuilder: (context, index) {
-                final category = _filteredItems[index];
-                return Dismissible(
-                  key: Key(category),
-                  onDismissed: (_) => _deleteCategory(category),
-                  direction: DismissDirection.endToStart,
-                  background: Container(
-                    alignment: Alignment.centerRight,
-                    color: Colors.red,
-                    child: const Icon(Icons.delete),
-                  ),
-                  child: Card(
-                    child: ListTile(
-                      title: Text(category),
-                      trailing: IconButton(
-                        icon: const Icon(Icons.delete),
-                        onPressed: () => _deleteCategory(category),
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-          Container(
-            width: double.infinity,
-            margin: const EdgeInsets.symmetric(horizontal: 100.0),
-            child: ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, 'categoriaslistcreate');
-              },
-              style: ElevatedButton.styleFrom(
-                foregroundColor: const Color.fromARGB(255, 255, 255, 255), backgroundColor: const Color.fromARGB(255, 4, 75, 134),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
-              ),
-              child: const Text('Agregar categoria'),
-            ),
-          ),
-        ],
-      ),
-    );
+  void _deleteCategoria(Map<String, dynamic> categoria) async {
+  final response = await http.delete(Uri.parse('http://${Configuracion.apiurl}/Api/producto-categorias/${categoria['producto_id']}/'));
+  if (response.statusCode == 204) {
+    setState(() {
+      _categorias.remove(categoria);
+      _filteredCategorias = _categorias;
+    });
+  //mostrar Snack de confirmacion de eliminacion
+  // ignore: use_build_context_synchronously
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text('La categoría ${categoria['nombre']} ha sido eliminada correctamente'),
+    ));
+  } else {
+    print('Error al eliminar la categoría');
   }
 }
+
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(
+      title: const Text('Categorías disponibles'),
+    ),
+    body: Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: TextField(
+            controller: _searchController,
+            onChanged: _filterCategorias,
+            decoration: InputDecoration(
+              hintText: 'Buscar categorías',
+              prefixIcon: const Icon(Icons.search),
+              suffixIcon: IconButton(
+                icon: const Icon(Icons.add_box),
+                onPressed: () {
+                  Navigator.pushNamed(context, 'categoriaslistcreate');
+                },
+              ),
+            ),
+          ),
+        ),
+        Expanded(
+          child: ListView.builder(
+            itemCount: _filteredCategorias.length,
+            itemBuilder: (BuildContext context, int index) {
+              final categoria = _filteredCategorias[index];
+            return Container(
+              margin: const EdgeInsets.all(8.0),
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.grey.shade300,
+                  width: 1.0,
+                ),
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              child: ListTile(
+                title: Text(categoria['nombre']),
+                trailing: IconButton(
+                  icon: const Icon(Icons.delete),
+                  color: const Color.fromARGB(255, 182, 30, 19),
+                  onPressed: () {
+                    _confirmDelete(categoria);
+                  },
+                ),
+                onTap: () {
+                Navigator.pushNamed(
+                  context,
+                  'categoriasedit',
+                  arguments: {
+                    'producto_id': categoria['producto_id'],
+                    'nombre_categoria': categoria['nombre'],
+                  },
+                );
+              },
+              ),
+            );
+            },
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+
+}             
