@@ -196,7 +196,7 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> login() async {
     if (nameController.text.isEmpty || passwordController.text.isEmpty) {
       showSnackbar(
-          "${nameController.text.isEmpty ? "Usuario" : ""} ${passwordController.text.isEmpty ? "Contraseña" : ""} requerido");
+          "Campos faltantes:${nameController.text.isEmpty ? " Usuario" : ""} ${passwordController.text.isEmpty ? "Contraseña" : ""}");
       return;
     }
     final datosdelposibleusuario = {
@@ -215,7 +215,7 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
     if (res.statusCode != 200) {
-      showSnackbar("Error al obtener usuario y contraseña");
+      showSnackbar("Error al autenticar");
       return;
     }
     final res2 = await http.post(urlobtenertoken,
@@ -230,7 +230,6 @@ class _LoginPageState extends State<LoginPage> {
     }
     final token = data2["token"];
     final userid = data["user_id"];
-    // print(token);
     // print(userid);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setInt('id', userid);
