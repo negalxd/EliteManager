@@ -51,7 +51,7 @@ class _ProviderlistState extends State<Providerlist> {
 Widget build(BuildContext context) {
   return Scaffold(
     appBar: AppBar(
-      title: const Text('Providers disponibles'),
+      title: const Text('Provedores disponibles'),
     ),
     body: Column(
       children: [
@@ -61,7 +61,7 @@ Widget build(BuildContext context) {
             controller: _searchController,
             onChanged: _filterProviders,
             decoration: const InputDecoration(
-              hintText: 'Buscar Providers',
+              hintText: 'Buscar Provedores',
               prefixIcon: Icon(Icons.search),
             ),
           ),
@@ -91,7 +91,7 @@ Widget build(BuildContext context) {
                 title: Text(proveedores['nombre']),
                 subtitle: Text('${proveedores['email']}'),
                 onTap: () {
-                  Navigator.pushNamed(context, 'productositem');
+                  Navigator.pushNamed(context, 'cardprov');
                 },
               ),
             );
@@ -102,6 +102,4 @@ Widget build(BuildContext context) {
     ),
   );
 }
-
-
-}             
+}      

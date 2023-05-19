@@ -75,6 +75,7 @@ class _AddProductWidgetState extends State<AddProductWidget> {
                     ),
                   ),
                 ),
+                
                 SizedBox(height: 20),
                 TextFormField(
                   decoration: InputDecoration(
