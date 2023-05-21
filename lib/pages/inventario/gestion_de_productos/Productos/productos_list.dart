@@ -141,8 +141,24 @@ Widget build(BuildContext context) {
                 ),
               ),
 
-                title: Text(producto['nombre']),
-                subtitle: Text('Precio: ${producto['precio']}'),
+                title: producto['estado'] == true
+                ? Text(producto['nombre'])
+                : Text(
+                  producto['nombre'],
+                  style: const TextStyle(
+                    color: Colors.grey,
+                    decoration: TextDecoration.lineThrough,
+                  ),
+                ),
+                subtitle: producto['estado'] == true
+                ? Text('Precio: ${producto['precio']}')
+                : Text(
+                  'Precio: ${producto['precio']}',
+                  style: const TextStyle(
+                    color: Colors.grey,
+                    decoration: TextDecoration.lineThrough,
+                  ),
+                ),
                 trailing: IconButton(
                   icon: const Icon(Icons.delete),
                   color: const Color.fromARGB(255, 182, 30, 19),
