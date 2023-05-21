@@ -12,54 +12,73 @@ class ProviderItemCard extends StatefulWidget {
 
 class _ProviderItemCardState extends State<ProviderItemCard> {
   bool isLoading = false;
-  bool isSwitchLoading = false;
   late String idproveedor;
   late String _nameproveedor;
   late String phoneproveedor;
   late String imageUrl;
   late String emailproveedor;
   late bool statusproveedor;
+  late Stream<bool> statusStream;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _fetchProveedorName();
+    statusStream = _getStatusStream();
   }
 
   Future<String> _fetchProveedorName() async {
-  final arguments =
-      ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
-  if (arguments != null &&
-      arguments.containsKey('id_prov') &&
-      arguments.containsKey('nombre_prov') &&
-      arguments.containsKey('phone_prov') &&
-      arguments.containsKey('email_prov') &&
-      arguments.containsKey('image_prov') &&
-      arguments.containsKey('estado_prov')) {
-    idproveedor = arguments['id_prov'].toString();
-    _nameproveedor = arguments['nombre_prov'].toString();
-    phoneproveedor = arguments['phone_prov'].toString();
-    emailproveedor = arguments['email_prov'].toString();
-    imageUrl = arguments['image_prov'].toString();
-    statusproveedor = arguments['estado_prov'] as bool;
-    print(idproveedor);
-    print(_nameproveedor);
-    print(phoneproveedor);
-    print(emailproveedor);
-    print(imageUrl);
-    print(statusproveedor);
+    final arguments =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
+    if (arguments != null &&
+        arguments.containsKey('id_prov') &&
+        arguments.containsKey('nombre_prov') &&
+        arguments.containsKey('phone_prov') &&
+        arguments.containsKey('email_prov') &&
+        arguments.containsKey('image_prov') &&
+        arguments.containsKey('estado_prov')) {
+      idproveedor = arguments['id_prov'].toString();
+      _nameproveedor = arguments['nombre_prov'].toString();
+      phoneproveedor = arguments['phone_prov'].toString();
+      emailproveedor = arguments['email_prov'].toString();
+      imageUrl = arguments['image_prov'].toString();
+      statusproveedor = arguments['estado_prov'] as bool;
+    }
+    return _nameproveedor;
   }
-  return _nameproveedor;
-}
+
+  Stream<bool> _getStatusStream() async* {
+    while (true) {
+      await Future.delayed(Duration(seconds: 5)); // Actualizar cada 5 segundos
+      yield await _fetchProveedorStatus();
+    }
+  }
+
+  Future<bool> _fetchProveedorStatus() async {
+    try {
+      final response = await http.get(
+        Uri.parse(
+            'http://${Configuracion.apiurl}/Api/proveedores/$idproveedor/'),
+        headers: {'Content-Type': 'application/json'},
+      );
+
+      final responseData = jsonDecode(response.body);
+      print(responseData);
+
+      final newProveedorStatus = responseData['estado'] as bool?;
+      return newProveedorStatus ?? false;
+    } catch (error) {
+      // Manejar el error de la API
+      print(error);
+      return statusproveedor;
+    }
+  }
 
   Future<void> _updateProveedorStatus(bool newStatus) async {
-    setState(() {
-      isSwitchLoading = true;
-    });
-
     try {
       final response = await http.put(
-        Uri.parse('http://${Configuracion.apiurl}/Api/proveedores/$idproveedor/'),
+        Uri.parse(
+            'http://${Configuracion.apiurl}/Api/proveedores/$idproveedor/'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'estado': newStatus,
@@ -67,29 +86,17 @@ class _ProviderItemCardState extends State<ProviderItemCard> {
       );
 
       final responseData = jsonDecode(response.body);
-      print(responseData);
 
-      // Obtener el nuevo valor de statusproveedor de la respuesta del servidor
       final newProveedorStatus = responseData['estado'] as bool?;
-
-      // Verificar si el valor no es nulo antes de asignarlo
       if (newProveedorStatus != null) {
-        // Actualizar manualmente el estado del widget
         setState(() {
           statusproveedor = newProveedorStatus;
         });
       }
-
-      // Obtener los datos actualizados
-      await _fetchProveedorName();
     } catch (error) {
       // Manejar el error de la API
       print(error);
       // Mostrar un mensaje de error o realizar alguna acción de recuperación
-    } finally {
-      setState(() {
-        isSwitchLoading = false;
-      });
     }
   }
 
@@ -97,18 +104,7 @@ class _ProviderItemCardState extends State<ProviderItemCard> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: FutureBuilder<String>(
-          future: _fetchProveedorName(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Text('Cargando...');
-            } else if (snapshot.hasData) {
-              return Text('${snapshot.data}');
-            } else {
-              return Text('Proveedor');
-            }
-          },
-        ),
+        title: Text(_nameproveedor),
         centerTitle: true,
       ),
       resizeToAvoidBottomInset: true,
@@ -141,7 +137,8 @@ class _ProviderItemCardState extends State<ProviderItemCard> {
                         ),
                         child: FadeInImage(
                           image: NetworkImage(imageUrl),
-                          placeholder: AssetImage('assets/images/placeholder.png'),
+                          placeholder:
+                              AssetImage('assets/images/placeholder.png'),
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -160,24 +157,32 @@ class _ProviderItemCardState extends State<ProviderItemCard> {
                               ),
                             ),
                           ),
-                          isSwitchLoading
-                              ? CircularProgressIndicator()
-                              : Switch(
-                                  value: statusproveedor,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      statusproveedor = value;
-                                    });
-                                    _updateProveedorStatus(value);
-                                  },
-                                  activeColor: Colors.white,
-                                  activeTrackColor: Theme.of(context).primaryColor,
-                                  inactiveTrackColor: Colors.grey[300],
-                                ),
+                          StreamBuilder<bool>(
+                            stream: statusStream,
+                            initialData: statusproveedor,
+                            builder: (context, snapshot) {
+                              final isSwitchLoading =
+                                  snapshot.connectionState ==
+                                          ConnectionState.waiting ||
+                                      snapshot.data == null;
+                              final currentStatus = snapshot.data ?? false;
+                              return isSwitchLoading
+                                  ? CircularProgressIndicator()
+                                  : Switch(
+                                      value: currentStatus,
+                                      onChanged: (value) {
+                                        _updateProveedorStatus(value);
+                                      },
+                                      activeColor: Colors.white,
+                                      activeTrackColor:
+                                          Theme.of(context).primaryColor,
+                                      inactiveTrackColor: Colors.grey[300],
+                                    );
+                            },
+                          ),
                         ],
                       ),
                     ),
-                    // SizedBox(height: 12.0),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 12.0),
                       child: Column(
@@ -223,3 +228,5 @@ class _ProviderItemCardState extends State<ProviderItemCard> {
     );
   }
 }
+
+

@@ -220,7 +220,6 @@ class _LoginPageState extends State<LoginPage> {
     }
     final res2 = await http.post(urlobtenertoken,
         headers: headers, body: jsonEncode(datosdelposibleusuario));
-    final data2 = jsonDecode(res2.body);
     if (res2.statusCode == 400) {
       showSnackbar("error");
       return;
@@ -228,7 +227,6 @@ class _LoginPageState extends State<LoginPage> {
     if (res2.statusCode != 200) {
       showSnackbar("Error con el token");
     }
-    final token = data2["token"];
     final userid = data["user_id"];
     // print(userid);
     SharedPreferences prefs = await SharedPreferences.getInstance();

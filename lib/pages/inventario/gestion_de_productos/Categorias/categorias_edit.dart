@@ -43,8 +43,8 @@ void _updateCategoria() async {
 
     //eliminar contexto para que no se pueda regresar a la pantalla anterior
     Navigator.of(context).pop();
+    Navigator.pushReplacementNamed(context, 'categorias');
 
-    Navigator.pushNamed(context, 'categorias');
   }
 }
 

@@ -1,262 +1,179 @@
-// import 'package:flutter/material.dart';
-
-// class ProductPagScreen extends StatefulWidget {
-//   const ProductPagScreen({Key? key}) : super(key: key);
-
-//   @override
-//   _ProductPagScreen createState() => _ProductPagScreen();
-// }
-
-// class _ProductPagScreen extends State<ProductPagScreen> {
-//   List<String> _listItems = ['Completillo','Completoide','Estoy loco','Palta', 'Tomates','Ketchup', 'Mostaza', 'Item 8','Item 9','Item 10'];
-
-//   List<String> _filteredItems = [];
-
-//   TextEditingController _searchController = TextEditingController();
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     _filteredItems = _listItems;
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: const Row(
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           children: [
-//             Text('Productos'),
-//           ],
-//         ),
-//         actions: [
-//           IconButton(
-//             icon: const Icon(Icons.person),
-//             onPressed: () {
-//               Navigator.pushNamed(context, 'error');
-//             },
-//           ),
-//         ],
-//       ),
-//       body: Column(
-//         children: [
-//           Container(
-//             margin: const EdgeInsets.only(bottom: 10.0),
-//             padding: const EdgeInsets.all(10.0),
-//             decoration: BoxDecoration(
-//               borderRadius: BorderRadius.circular(10.0),
-//             ),
-//             child: TextField(
-//               controller: _searchController,
-//               onChanged: (value) {
-//                 setState(() {
-//                   _filteredItems = _listItems
-//                       .where((item) =>
-//                           item.toLowerCase().contains(value.toLowerCase()))
-//                       .toList();
-//                 });
-//               },
-//               decoration: const InputDecoration(
-//                 hintText: 'Buscar',
-//                 prefixIcon: Icon(Icons.search),
-//               ),
-//             ),
-//           ),
-//           Expanded(
-//             child: ListView.builder(
-//               itemCount: _filteredItems.length,
-//               itemBuilder: (context, index) {
-//                 return InkWell(
-//                   onTap: () {
-//                     // Add logic for when the card is tapped
-//                   },
-//                   child: Card(
-//                     child: ListTile(
-//                       leading: const Icon(Icons.image),
-//                       title: Text(_filteredItems[index]),
-//                       subtitle: Text('Stock ${index + 1}'),
-//                     ),
-//                   ),
-//                 );
-//               },
-//             ),
-//           ),
-//           Container(
-//             width: double.infinity,
-//             margin: const EdgeInsets.symmetric(horizontal: 100.0),
-//             child: ElevatedButton(
-//               onPressed: () {
-//                 // Add logic to add a new item to the list here
-//               },
-//               style: ElevatedButton.styleFrom(
-//                 foregroundColor: const Color.fromARGB(255, 255, 255, 255), backgroundColor: const Color.fromARGB(255, 4, 75, 134),
-//                 shape: RoundedRectangleBorder(
-//                   borderRadius: BorderRadius.circular(20.0),
-//                 ),
-//               ),
-//               child: const Text('Agregar Producto'),
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:elite_manager/pages/config.dart';
 
-class ProductPagScreen extends StatefulWidget {
-  const ProductPagScreen({Key? key}) : super(key: key);
-
+class ProductosScreen extends StatefulWidget {
   @override
-  _ProductPagScreenState createState() => _ProductPagScreenState();
+  _ProductosScreenState createState() => _ProductosScreenState();
 }
 
-class _ProductPagScreenState extends State<ProductPagScreen> {
-  List<String> _listItems = ['Completo Italiano', 'Completoide Vegano', "Como odio a los negros"];
+class _ProductosScreenState extends State<ProductosScreen> {
+  final TextEditingController _searchController = TextEditingController();
+  List<Map<String, dynamic>> _productos = [];
 
-  List<String> _filteredItems = [];
+  List<Map<String, dynamic>> _filteredProductos = [];
 
-  TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _filteredItems = _listItems;
+    _getProductos();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('Productos disponibles'),
-          ],
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.person),
-            onPressed: () {
-              Navigator.pushNamed(context, 'profile');
-            },
-          ),
-        ],
-      ),
-      body: Column(
-        children: [
-          Container(
-            margin: const EdgeInsets.only(bottom: 10.0),
-            padding: const EdgeInsets.all(10.0),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _searchController,
-                    onChanged: (value) {
-                      setState(() {
-                        _filteredItems = _listItems
-                            .where((item) =>
-                            item.toLowerCase().contains(value.toLowerCase()))
-                            .toList();
-                      });
-                    },
-                    decoration: InputDecoration(
-                      hintText: 'Buscar',
-                      prefixIcon: Icon(Icons.search),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                    ),
-                  ),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.clear),
-                  onPressed: () {
-                    setState(() {
-                      _searchController.text = '';
-                      _filteredItems = _listItems;
-                    });
-                  },
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: _filteredItems.length,
-              itemBuilder: (context, index) {
-                return InkWell(
-                  onTap: () {
-                    Navigator.pushNamed(context, 'productositem');
-                  },
-                  child: Card(
-                    margin: const EdgeInsets.symmetric(
-                        horizontal: 10.0, vertical: 5.0),
-                    child: ListTile(
-                      leading: Container(
-                        width: 50.0,
-                        child: Image.asset('assets/gestionProd.png'),
-                      ),
-                      title: Text(_filteredItems[index]),
-                      subtitle: Text('Stock del insumo ${index + 1}'),
-                      trailing: IconButton(
-                        icon: Icon(Icons.delete),
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                              title: Text('¿Está seguro de eliminar el item?'),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: Text('Cancelar'),
-                                ),
-                                TextButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      _filteredItems.removeAt(index);
-                                    });
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: Text('Eliminar'),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-          Container(
-            width: double.infinity,
-            margin: const EdgeInsets.symmetric(horizontal: 100.0),
-            child: ElevatedButton(
+  final utf8decoder = const Utf8Decoder();
+
+  void _getProductos() async {
+  final response = await http.get(Uri.parse('http://${Configuracion.apiurl}/Api/productos/'));
+  final List<dynamic> responseData = json.decode(utf8decoder.convert(response.bodyBytes));
+  setState(() {
+    _productos = responseData.cast<Map<String, dynamic>>();
+    _filteredProductos = _productos.toList();
+  });
+  print(_filteredProductos);
+}
+
+
+  void _filterProductos(String query) {
+    setState(() {
+      _filteredProductos = _productos
+          .where((producto) =>
+              producto['nombre']
+                  .toLowerCase()
+                  .contains(query.toLowerCase()))
+          .toList();
+    });
+  }
+
+  void _confirmDelete(Map<String, dynamic> producto) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Eliminar producto"),
+          content: Text("¿Está seguro que desea eliminar el producto ${producto['nombre']}?, esta acción no se puede deshacer."),
+          actions: [
+            TextButton(
+              child: const Text("Cancelar"),
               onPressed: () {
-                Navigator.pushNamed(context, 'productoscreate');
+                Navigator.of(context).pop();
               },
-              style: ElevatedButton.styleFrom(
-                foregroundColor: const Color.fromARGB(255, 255, 255, 255),
-                backgroundColor: const Color.fromARGB(255, 4, 75, 134),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
-              ),
-              child: const Text('Agregar item'),
             ),
-          ),
-        ],
-      ),
+            TextButton(
+              child: const Text(
+                "Eliminar",
+                style: TextStyle(color: Colors.red),
+              ),
+              onPressed: () {
+                _deleteProducto(producto);
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
+
+  void _deleteProducto(Map<String, dynamic> producto) async {
+  final response = await http.delete(Uri.parse('http://${Configuracion.apiurl}/Api/productos/${producto['producto_id']}/'));
+  if (response.statusCode == 200) {
+    setState(() {
+      _productos.remove(producto);
+      _filteredProductos = _productos;
+    });
+  //mostrar Snack de confirmacion de eliminacion
+  // ignore: use_build_context_synchronously
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text('El producto ${producto['nombre']} ha sido eliminado correctamente'),
+    ));
+  } else {
+    print('Error al eliminar el producto');
+  }
 }
+
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(
+      title: const Text('productos disponibles'),
+    ),
+    body: Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: TextField(
+            controller: _searchController,
+            onChanged: _filterProductos,
+            decoration: InputDecoration(
+              hintText: 'Buscar productos',
+              prefixIcon: const Icon(Icons.search),
+              suffixIcon: IconButton(
+                color: Color.fromARGB(255, 4, 75, 134),
+                icon: const Icon(Icons.add_box),
+                onPressed: () {
+                  Navigator.pushNamed(context, 'productoscreate');
+                },
+              ),
+            ),
+          ),
+        ),
+        Expanded(
+          child: ListView.builder(
+            itemCount: _filteredProductos.length,
+            itemBuilder: (BuildContext context, int index) {
+              final producto = _filteredProductos[index];
+            return Container(
+              margin: const EdgeInsets.all(8.0),
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.grey.shade300,
+                  width: 1.0,
+                ),
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              child: ListTile(
+              leading: CircleAvatar(
+                child: FadeInImage(
+                  placeholder: const AssetImage('assets/Loading_icon.gif'),
+                  image: producto['imagen'] != null ? NetworkImage(producto['imagen']) : const AssetImage('assets/defaultproducto.jpg') as ImageProvider,
+                  fit: BoxFit.cover,
+                ),
+              ),
+
+                title: Text(producto['nombre']),
+                subtitle: Text('Precio: ${producto['precio']}'),
+                trailing: IconButton(
+                  icon: const Icon(Icons.delete),
+                  color: const Color.fromARGB(255, 182, 30, 19),
+                  onPressed: () {
+                    _confirmDelete(producto);
+                  },
+                ),
+                onTap: () {
+                    List<String> categoriasProd = [];
+                    for (var categoria in producto['categorias']) {
+                      categoriasProd.add(categoria['nombre']);
+                    }
+                    Navigator.pushNamed(context, 'productositem', arguments: {
+                      'id_prod': producto['producto_id'],
+                      'nombre_prod': producto['nombre'],
+                      'descr_prod': producto['descripcion'],
+                      'precio_prod': producto['precio'],
+                      'categorias_prod': categoriasProd,
+                      'imagen_prod': producto['imagen'],
+                      'estado_prod': producto['estado'],
+                    });
+                  },
+              ),
+            );
+            },
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+
+}  
