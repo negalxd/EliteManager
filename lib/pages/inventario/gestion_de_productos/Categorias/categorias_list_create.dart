@@ -16,6 +16,8 @@ class _AddCategoryProductWidgetState extends State<AddCategoryProductWidget> {
   String _categoriaProdName = '';
 
 
+
+
 void _addCategoria() async {
   if (_formKey.currentState!.validate()) {
     _formKey.currentState!.save();
@@ -26,9 +28,9 @@ void _addCategoria() async {
         'nombre': _categoriaProdName,
       }));
 
-    //eliminar contexto para que no se pueda regresar a la pantalla anterior
+    // Eliminar contexto para que no se pueda regresar a la pantalla anterior
     Navigator.of(context).pop();
-    Navigator.pushNamed(context, 'categorias');
+    Navigator.pushReplacementNamed(context, 'categorias'); // Utilizar pushReplacementNamed en lugar de pushNamed
 
     final responseData = jsonDecode(response.body);
     print(responseData);
@@ -94,3 +96,5 @@ void _addCategoria() async {
     );
   }
 }
+
+
