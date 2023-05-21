@@ -40,7 +40,7 @@ class _ProviderlistState extends State<Providerlist> {
               proveedores['nombre']
                   .toLowerCase()
                   .contains(query.toLowerCase()) ||
-              proveedores['nombre']
+              proveedores['email']
                   .toLowerCase()
                   .contains(query.toLowerCase()))
           .toList();
@@ -91,8 +91,19 @@ Widget build(BuildContext context) {
                 title: Text(proveedores['nombre']),
                 subtitle: Text('${proveedores['email']}'),
                 onTap: () {
-                  Navigator.pushNamed(context, 'cardprov');
-                },
+                Navigator.pushNamed(
+                  context,
+                  'proveedoresitem',
+                  arguments: {
+                    'id_prov': proveedores['id'],
+                    'nombre_prov': proveedores['nombre'],
+                    'phone_prov': proveedores['telefono'],
+                    'email_prov': proveedores['email'],
+                    'image_prov': proveedores['image_proveedor'],
+                    'estado_prov': proveedores['estado'],
+                  },
+                );
+              },
               ),
             );
             },
