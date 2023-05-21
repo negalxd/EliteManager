@@ -1,6 +1,10 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
+import 'package:elite_manager/pages/config.dart';
+
 
 class AddProductWidget extends StatefulWidget {
   const AddProductWidget({Key? key}) : super(key: key);
@@ -15,179 +19,276 @@ class _AddProductWidgetState extends State<AddProductWidget> {
   String _productName = '';
   String _description = '';
   int _precio = 0;
-  String _categoria = '';
+  List<String> selectedCategories = [];
+  List<Map<String, dynamic>> allCategories = [];
 
   File? _image;
 
   Future<void> _pickImage() async {
-    final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      setState(() {
+        _image = File(pickedFile.path);
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchCategories();
+  }
+
+  //utf8decoder
+  final utf8decoder = const Utf8Decoder();
+
+  Future<void> _fetchCategories() async {
+  final response = await http.get(
+    Uri.parse('http://${Configuracion.apiurl}/Api/producto-categorias/'),
+  );
+
+  if (response.statusCode == 200) {
+    final List<dynamic> categoriesData =
+        jsonDecode(utf8decoder.convert(response.bodyBytes));
 
     setState(() {
-      _image = File(pickedFile!.path);
+      allCategories = categoriesData
+          .map((category) => Map<String, dynamic>.from(category))
+          .toList();
     });
+  } else {
+    // Error al obtener las categorías
+    // Manejar el error de acuerdo a tus necesidades
+    print('Error al obtener las categorías');
   }
+}
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Añadir Insumo'),
+        title: Text('Añadir producto'),
         centerTitle: true,
       ),
       resizeToAvoidBottomInset: true,
       body: SingleChildScrollView(
         child: Card(
-        margin: EdgeInsets.all(16),
-        color: Color.fromARGB(255, 255, 255, 255),
-        elevation: 8,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        child: Padding(
-          padding: EdgeInsets.all(16),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                if (_image != null) ...[
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      color: Colors.white,
-                    ),
-                    height: 200,
-                    child: Image.file(_image!, fit: BoxFit.cover, width: double.infinity),
-                  ),
-                  SizedBox(height: 16),
-                ],
-                ElevatedButton.icon(
-                  onPressed: _pickImage,
-                  icon: Icon(Icons.add_photo_alternate, size: 30, color: Color.fromARGB(255, 4, 75, 134),),
-                  label: Text(
-                    'Añadir imagen',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: const Color.fromARGB(255, 4, 75, 134),
-                    ),
-                  ),
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(
-                      Color.fromARGB(255, 255, 255, 255),
-                    ),
-                  ),
-                ),
-                
-                SizedBox(height: 20),
-                TextFormField(
-                  decoration: InputDecoration(
-                    labelText: 'Nombre insumo',
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color.fromARGB(255, 4, 75, 134)),
-                    ),
-                  ),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Por favor ingrese el nombre del insumo';
-                    }
-                    return null;
-                  },
-                  onSaved: (value) {
-                    _productName = value!;
-                  },
-                ),
-                SizedBox(height: 16),
-                TextFormField(
-                  decoration: InputDecoration(
-                    labelText: 'Descripción',
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color.fromARGB(255, 4, 75, 134)),
-                    ),
-                  ),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Por favor ingrese una descripción';
-                    }
-                    return null;
-                  },
-                  onSaved: (value) {
-                    _description = value!;
-                  },
-                ),
-                SizedBox(height: 16),
-                TextFormField(
-                  decoration: InputDecoration(
-                    labelText: 'Precio',
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color.fromARGB(255, 4, 75, 134)),
-                    ),
-                  ),
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Por favor ingrese el precio';
-                    }
-                    return null;
-                  },
-                  onSaved: (value) {
-                    _precio = int.parse(value!);
-                  },
-                ),
-                SizedBox(height: 16),
-                DropdownButtonFormField<String>(
-                  decoration: InputDecoration(
-                    labelText: 'Proveedor',
-                    border: OutlineInputBorder(),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Color.fromARGB(255, 4, 75, 134),
-                        width: 2.0,
+          margin: EdgeInsets.all(16),
+          color: Color.fromARGB(255, 255, 255, 255),
+          elevation: 8,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Padding(
+            padding: EdgeInsets.all(16),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  if (_image != null) ...[
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: Colors.white,
+                      ),
+                      height: 200,
+                      child: Image.file(
+                        _image!,
+                        fit: BoxFit.cover,
+                        width: double.infinity,
                       ),
                     ),
-                    labelStyle: TextStyle(
-                      color: Color.fromARGB(255, 4, 75, 134), // Establece el color del texto del label a blanco
+                    SizedBox(height: 16),
+                  ],
+                  ElevatedButton.icon(
+                    onPressed: _pickImage,
+                    icon: Icon(
+                      Icons.add_photo_alternate,
+                      size: 30,
+                      color: Color.fromARGB(255, 4, 75, 134),
+                    ),
+                    label: Text(
+                      'Añadir imagen',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: const Color.fromARGB(255, 4, 75, 134),
+                      ),
+                    ),
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                        Color.fromARGB(255, 255, 255, 255),
+                      ),
                     ),
                   ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Por favor selecciona un proveedor';
-                    }
-                    return null;
-                  },
-                  onChanged: (value) {
-                    setState(() {
-                      _categoria= value!;
-                    });
-                  },
-                  onSaved: (value) {
-                    _categoria = value!;
-                  },
-                  items: ['KFC', 'Fortnite'].map((provider) {
-                    return DropdownMenuItem<String>(
-                      value: provider,
-                      child: Text(provider),
-                    );
-                  }).toList(),
-                ),
-                SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () {
+                  SizedBox(height: 20),
+                  TextFormField(
+                    decoration: InputDecoration(
+                      labelText: 'Nombre producto',
+                      border: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: Color.fromARGB(255, 4, 75, 134)),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Por favor ingrese el nombre del producto';
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      _productName = value!;
+                    },
+                  ),
+                  SizedBox(height: 16),
+                  TextFormField(
+                    decoration: InputDecoration(
+                      labelText: 'Descripción',
+                      border: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: Color.fromARGB(255, 4, 75, 134)),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Por favor ingrese una descripción';
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      _description = value!;
+                    },
+                  ),
+                  SizedBox(height: 16),
+                  TextFormField(
+                    decoration: InputDecoration(
+                      labelText: 'Precio',
+                      border: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: Color.fromARGB(255, 4, 75, 134)),
+                      ),
+                    ),
+                    keyboardType: TextInputType.number,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Por favor ingrese el precio';
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      _precio = int.parse(value!);
+                    },
+                  ),
+                  SizedBox(height: 16),
+                  Wrap(
+                    children: allCategories.isNotEmpty
+                        ? allCategories.map((category) {
+                            final categoryId = category['cat_id'].toString();
+                            final categoryName = category['nombre'].toString();
+                            return Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: FilterChip(
+                                label: Text(categoryName),
+                                selected: selectedCategories.contains(categoryId),
+                                onSelected: (isSelected) {
+                                  setState(() {
+                                    if (isSelected) {
+                                      selectedCategories.add(categoryId);
+                                    } else {
+                                      selectedCategories.remove(categoryId);
+                                    }
+                                  });
+                                },
+                              ),
+                            );
+                          }).toList()
+                        : [
+                            Text('No existen categorías creadas.'),
+                          ],
+                  ),
+                  SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () {
                     if (_formKey.currentState!.validate()) {
                       _formKey.currentState!.save();
-                      // TODO: Save the product to the database
+
+                      List<Map<String, dynamic>> categoriasList = selectedCategories.map((categoryId) {
+                        return {
+                          'cat_id': categoryId,
+                          'nombre': allCategories.firstWhere((category) => category['cat_id'].toString() == categoryId)['nombre'],
+                        };
+                      }).toList();
+
+                      _addProduct(_productName, _precio, _description, categoriasList);
+
+                      // Reiniciar el formulario
+                      _formKey.currentState!.reset();
+                      setState(() {
+                        _image = null;
+                        selectedCategories.clear();
+                      });
                     }
                   },
-                  style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(const Color.fromARGB(255, 4, 75, 134)),
-                  foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                          const Color.fromARGB(255, 4, 75, 134)),
+                      foregroundColor: MaterialStateProperty.all<Color>(
+                        Colors.white,
+                      ),
+                    ),
+                    child: Text('Guardar'),
                   ),
-                  child: Text('Guardar'),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
       ),
-      ),
     );
+  }
+
+void _addProduct(
+  String nombre,
+  int precio,
+  String descripcion,
+  List<Map<String, dynamic>> categorias,
+) async {
+  // Crear el objeto del producto
+  Map<String, dynamic> producto = {
+    'nombre': nombre,
+    'precio': precio,
+    'descripcion': descripcion,
+    'categorias': categorias,
+  };
+
+  // Crear la solicitud de envío
+  var url = Uri.parse('http://${Configuracion.apiurl}/Api/productos/');
+  var headers = {'Content-Type': 'application/json'};
+  var body = jsonEncode(producto);
+
+  // Enviar la solicitud y obtener la respuesta
+  var response = await http.post(url, headers: headers, body: body);
+
+  // Verificar el código de estado de la respuesta
+  if (response.statusCode == 201) {
+    // La solicitud fue exitosa
+    // Mostrar snackbar de confirmación
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text('El producto $nombre ha sido añadido correctamente'),
+    ));
+    // Navegar a la pantalla de productos
+    Navigator.of(context).pop();
+    Navigator.pushReplacementNamed(context, 'productospag');
+  } else {
+    // Ocurrió un error en la solicitud
+    // Mostrar snackbar de error
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text('Error al añadir el producto'),
+    ));
+    print('Error al añadir el producto');
   }
 }
 
+}
