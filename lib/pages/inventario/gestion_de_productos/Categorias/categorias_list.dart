@@ -1,3 +1,4 @@
+
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -11,13 +12,9 @@ class CategoriasScreen extends StatefulWidget {
 
 class _CategoriasScreenState extends State<CategoriasScreen> {
   final TextEditingController _searchController = TextEditingController();
-  
   List<Map<String, dynamic>> _categorias = [];
-
-  List<Map<String, dynamic>> _filteredCategorias = [];
-
-  StreamController<List<Map<String, dynamic>>> _categoriasStreamController = StreamController<List<Map<String, dynamic>>>();
-
+  ValueNotifier<List<Map<String, dynamic>>> _filteredCategorias = ValueNotifier<List<Map<String, dynamic>>>([]);
+  
   @override
   void initState() {
     super.initState();
@@ -26,7 +23,7 @@ class _CategoriasScreenState extends State<CategoriasScreen> {
 
   @override
   void dispose() {
-    _categoriasStreamController.close();
+    _filteredCategorias.dispose();
     super.dispose();
   }
 
@@ -35,14 +32,15 @@ class _CategoriasScreenState extends State<CategoriasScreen> {
   void _getCategorias() async {
     final response = await http.get(Uri.parse('http://${Configuracion.apiurl}/Api/producto-categorias/'));
     final List<dynamic> responseData = json.decode(utf8decoder.convert(response.bodyBytes));
-    _categorias = responseData.cast<Map<String, dynamic>>();
-    _filteredCategorias = _categorias.toList();
-    _categoriasStreamController.add(_filteredCategorias);
+    setState(() {
+      _categorias = responseData.cast<Map<String, dynamic>>();
+      _filteredCategorias.value = _categorias.toList();
+    });
   }
 
   void _filterCategorias(String query) {
     setState(() {
-      _filteredCategorias = _categorias
+      _filteredCategorias.value = _categorias
           .where((categoria) =>
               categoria['nombre']
                   .toLowerCase()
@@ -86,10 +84,8 @@ class _CategoriasScreenState extends State<CategoriasScreen> {
     if (response.statusCode == 204) {
       setState(() {
         _categorias.remove(categoria);
-        _filteredCategorias = _categorias;
-        _categoriasStreamController.add(_filteredCategorias);
+        _filteredCategorias.value = _categorias;
       });
-      //mostrar Snack de confirmacion de eliminacion
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('La categoría ${categoria['nombre']} ha sido eliminada correctamente'),
       ));
@@ -115,7 +111,7 @@ class _CategoriasScreenState extends State<CategoriasScreen> {
                 hintText: 'Buscar categorías',
                 prefixIcon: const Icon(Icons.search),
                 suffixIcon: IconButton(
-                  color: Color.fromARGB(255, 4, 75, 134),
+                  color: const Color.fromARGB(255, 4, 75, 134),
                   icon: const Icon(Icons.add_box),
                   onPressed: () {
                     Navigator.pushNamed(context, 'categoriaslistcreate');
@@ -125,11 +121,10 @@ class _CategoriasScreenState extends State<CategoriasScreen> {
             ),
           ),
           Expanded(
-            child: StreamBuilder<List<Map<String, dynamic>>>(
-              stream: _categoriasStreamController.stream,
-              builder: (BuildContext context, AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
-                if (snapshot.hasData) {
-                  final categorias = snapshot.data!;
+            child: ValueListenableBuilder<List<Map<String, dynamic>>>(
+              valueListenable: _filteredCategorias,
+              builder: (BuildContext context, List<Map<String, dynamic>> categorias, Widget? child) {
+                if (categorias.isNotEmpty) {
                   return ListView.builder(
                     itemCount: categorias.length,
                     itemBuilder: (BuildContext context, int index) {
