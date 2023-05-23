@@ -167,20 +167,17 @@ Widget build(BuildContext context) {
                   },
                 ),
                 onTap: () {
-                    List<String> categoriasProd = [];
-                    for (var categoria in producto['categorias']) {
-                      categoriasProd.add(categoria['nombre']);
-                    }
-                    Navigator.pushNamed(context, 'productositem', arguments: {
-                      'id_prod': producto['producto_id'],
-                      'nombre_prod': producto['nombre'],
-                      'descr_prod': producto['descripcion'],
-                      'precio_prod': producto['precio'],
-                      'categorias_prod': categoriasProd,
-                      'imagen_prod': producto['imagen'],
-                      'estado_prod': producto['estado'],
-                    });
-                  },
+                List<String> categoriasProd = List<String>.from(producto['categorias']);
+                Navigator.pushNamed(context, 'productositem', arguments: {
+                  'id_prod': producto['producto_id'],
+                  'nombre_prod': producto['nombre'],
+                  'descr_prod': producto['descripcion'],
+                  'precio_prod': producto['precio'],
+                  'categorias_prod': categoriasProd,
+                  'imagen_prod': producto['imagen'],
+                  'estado_prod': producto['estado'],
+                });
+              },
               ),
             );
             },
