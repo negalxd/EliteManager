@@ -86,6 +86,7 @@ class _ProductosScreenState extends State<ProductosScreen> {
   // ignore: use_build_context_synchronously
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text('El producto ${producto['nombre']} ha sido eliminado correctamente'),
+      backgroundColor: Colors.red,
     ));
   } else {
     print('Error al eliminar el producto');
@@ -141,8 +142,24 @@ Widget build(BuildContext context) {
                 ),
               ),
 
-                title: Text(producto['nombre']),
-                subtitle: Text('Precio: ${producto['precio']}'),
+                title: producto['estado'] == true
+                ? Text(producto['nombre'])
+                : Text(
+                  producto['nombre'],
+                  style: const TextStyle(
+                    color: Colors.grey,
+                    decoration: TextDecoration.lineThrough,
+                  ),
+                ),
+                subtitle: producto['estado'] == true
+                ? Text('Precio: ${producto['precio']}')
+                : Text(
+                  'Precio: ${producto['precio']}',
+                  style: const TextStyle(
+                    color: Colors.grey,
+                    decoration: TextDecoration.lineThrough,
+                  ),
+                ),
                 trailing: IconButton(
                   icon: const Icon(Icons.delete),
                   color: const Color.fromARGB(255, 182, 30, 19),
@@ -151,20 +168,17 @@ Widget build(BuildContext context) {
                   },
                 ),
                 onTap: () {
-                    List<String> categoriasProd = [];
-                    for (var categoria in producto['categorias']) {
-                      categoriasProd.add(categoria['nombre']);
-                    }
-                    Navigator.pushNamed(context, 'productositem', arguments: {
-                      'id_prod': producto['producto_id'],
-                      'nombre_prod': producto['nombre'],
-                      'descr_prod': producto['descripcion'],
-                      'precio_prod': producto['precio'],
-                      'categorias_prod': categoriasProd,
-                      'imagen_prod': producto['imagen'],
-                      'estado_prod': producto['estado'],
-                    });
-                  },
+                List<String> categoriasProd = List<String>.from(producto['categorias']);
+                Navigator.pushNamed(context, 'productositem', arguments: {
+                  'id_prod': producto['producto_id'],
+                  'nombre_prod': producto['nombre'],
+                  'descr_prod': producto['descripcion'],
+                  'precio_prod': producto['precio'],
+                  'categorias_prod': categoriasProd,
+                  'imagen_prod': producto['imagen'],
+                  'estado_prod': producto['estado'],
+                });
+              },
               ),
             );
             },

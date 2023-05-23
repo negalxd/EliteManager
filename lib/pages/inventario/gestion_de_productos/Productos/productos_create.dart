@@ -5,7 +5,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:elite_manager/pages/config.dart';
 
-
 class AddProductWidget extends StatefulWidget {
   const AddProductWidget({Key? key}) : super(key: key);
 
@@ -41,29 +40,26 @@ class _AddProductWidgetState extends State<AddProductWidget> {
     _fetchCategories();
   }
 
-  //utf8decoder
   final utf8decoder = const Utf8Decoder();
 
   Future<void> _fetchCategories() async {
-  final response = await http.get(
-    Uri.parse('http://${Configuracion.apiurl}/Api/producto-categorias/'),
-  );
+    final response = await http.get(
+      Uri.parse('http://${Configuracion.apiurl}/Api/producto-categorias/'),
+    );
 
-  if (response.statusCode == 200) {
-    final List<dynamic> categoriesData =
-        jsonDecode(utf8decoder.convert(response.bodyBytes));
+    if (response.statusCode == 200) {
+      final List<dynamic> categoriesData =
+          jsonDecode(utf8decoder.convert(response.bodyBytes));
 
-    setState(() {
-      allCategories = categoriesData
-          .map((category) => Map<String, dynamic>.from(category))
-          .toList();
-    });
-  } else {
-    // Error al obtener las categorías
-    // Manejar el error de acuerdo a tus necesidades
-    print('Error al obtener las categorías');
+      setState(() {
+        allCategories = categoriesData
+            .map((category) => Map<String, dynamic>.from(category))
+            .toList();
+      });
+    } else {
+      print('Error al obtener las categorías');
+    }
   }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -185,19 +181,20 @@ class _AddProductWidgetState extends State<AddProductWidget> {
                   Wrap(
                     children: allCategories.isNotEmpty
                         ? allCategories.map((category) {
-                            final categoryId = category['cat_id'].toString();
-                            final categoryName = category['nombre'].toString();
+                            final categoryName =
+                                category['nombre'].toString();
                             return Padding(
                               padding: const EdgeInsets.all(4.0),
                               child: FilterChip(
                                 label: Text(categoryName),
-                                selected: selectedCategories.contains(categoryId),
+                                selected: selectedCategories
+                                    .contains(categoryName),
                                 onSelected: (isSelected) {
                                   setState(() {
                                     if (isSelected) {
-                                      selectedCategories.add(categoryId);
+                                      selectedCategories.add(categoryName);
                                     } else {
-                                      selectedCategories.remove(categoryId);
+                                      selectedCategories.remove(categoryName);
                                     }
                                   });
                                 },
@@ -211,26 +208,24 @@ class _AddProductWidgetState extends State<AddProductWidget> {
                   SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      _formKey.currentState!.save();
+                      if (_formKey.currentState!.validate()) {
+                        _formKey.currentState!.save();
 
-                      List<Map<String, dynamic>> categoriasList = selectedCategories.map((categoryId) {
-                        return {
-                          'cat_id': categoryId,
-                          'nombre': allCategories.firstWhere((category) => category['cat_id'].toString() == categoryId)['nombre'],
-                        };
-                      }).toList();
+                        _addProduct(
+                          _productName,
+                          _precio,
+                          _description,
+                          selectedCategories,
+                          _image, // Agregar la imagen al método
+                        );
 
-                      _addProduct(_productName, _precio, _description, categoriasList);
-
-                      // Reiniciar el formulario
-                      _formKey.currentState!.reset();
-                      setState(() {
-                        _image = null;
-                        selectedCategories.clear();
-                      });
-                    }
-                  },
+                        _formKey.currentState!.reset();
+                        setState(() {
+                          _image = null;
+                          selectedCategories.clear();
+                        });
+                      }
+                    },
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all<Color>(
                           const Color.fromARGB(255, 4, 75, 134)),
@@ -253,42 +248,57 @@ void _addProduct(
   String nombre,
   int precio,
   String descripcion,
-  List<Map<String, dynamic>> categorias,
+  List<String> categorias,
+  File? imagen,
 ) async {
-  // Crear el objeto del producto
-  Map<String, dynamic> producto = {
-    'nombre': nombre,
-    'precio': precio,
-    'descripcion': descripcion,
-    'categorias': categorias,
-  };
-
-  // Crear la solicitud de envío
   var url = Uri.parse('http://${Configuracion.apiurl}/Api/productos/');
-  var headers = {'Content-Type': 'application/json'};
-  var body = jsonEncode(producto);
+  var request = http.MultipartRequest('POST', url);
 
-  // Enviar la solicitud y obtener la respuesta
-  var response = await http.post(url, headers: headers, body: body);
+  request.fields['nombre'] = nombre;
+  request.fields['precio'] = precio.toString();
+  request.fields['estado'] = true.toString();
+  request.fields['descripcion'] = descripcion;
 
-  // Verificar el código de estado de la respuesta
+  // Agregar categorías individualmente
+  for (var i = 0; i < categorias.length; i++) {
+    request.fields['categorias'] = categorias[i];
+  }
+
+  if (imagen != null) {
+    var stream = http.ByteStream(Stream.castFrom(imagen.openRead()));
+    var length = await imagen.length();
+
+    var multipartFile = http.MultipartFile(
+      'imagen',
+      stream,
+      length,
+      filename: imagen.path.split('/').last,
+    );
+
+    request.files.add(multipartFile);
+  }
+
+  print('Aquí está la solicitud que se envía:');
+  print(request);
+
+  var response = await request.send();
+
   if (response.statusCode == 201) {
-    // La solicitud fue exitosa
-    // Mostrar snackbar de confirmación
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text('El producto $nombre ha sido añadido correctamente'),
-    ));
-    // Navegar a la pantalla de productos
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('El producto $nombre ha sido añadido correctamente'),
+        backgroundColor: Colors.green,
+      ),
+    );
     Navigator.of(context).pop();
     Navigator.pushReplacementNamed(context, 'productospag');
   } else {
-    // Ocurrió un error en la solicitud
-    // Mostrar snackbar de error
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text('Error al añadir el producto'),
-    ));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Error al añadir el producto'),
+      ),
+    );
     print('Error al añadir el producto');
   }
 }
-
 }

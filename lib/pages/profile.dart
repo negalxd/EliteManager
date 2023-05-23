@@ -94,59 +94,40 @@ Widget build(BuildContext context) {
           const SizedBox(height: 10),
           Card(
             margin: const EdgeInsets.symmetric(horizontal: 20),
-            color: Colors.white,
-            elevation: 10,
+            elevation: 1,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 const SizedBox(height: 20),
-                CircleAvatar(
-                  radius: 150,
-                  backgroundImage: _profileImageUrl.isNotEmpty
-                      ? NetworkImage('http://${Configuracion.apiurl}/$_profileImageUrl')
-                      : const AssetImage('assets/defaultimage.png') as ImageProvider<Object>?,
-                ),
-                const SizedBox(height: 20),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 70, vertical: 10),
-                  decoration: BoxDecoration(
-                    color: const Color.fromRGBO(255, 255, 255, 1),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Text(
-                    _username,
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
+                ClipOval(
+                  child: Container(
+                    width: 150,
+                    height: 150,
+                    child: _profileImageUrl.isNotEmpty
+                        ? Image.network(
+                            'http://${Configuracion.apiurl}/$_profileImageUrl',
+                            fit: BoxFit.cover,
+                          )
+                        : Image.asset(
+                            'assets/defaultimage.png',
+                            fit: BoxFit.cover,
+                          ),
                   ),
                 ),
                 const SizedBox(height: 20),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 70, vertical: 10),
-                  decoration: BoxDecoration(
-                    color: Color.fromRGBO(255, 255, 255, 1),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Text(
-                    _name,
-                    style: const TextStyle(
-                      fontSize: 15,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 70, vertical: 10),
-                  decoration: BoxDecoration(
-                    color: Color.fromRGBO(255, 255, 255, 1),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Text(
-                    _email,
-                    style: const TextStyle(
-                      fontSize: 15,
-                    ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    children: [
+                      _buildInfoRow(Icons.person, 'Nombre de usuario', _username),
+                      const SizedBox(height: 10),
+                      _buildInfoRow(Icons.person_outline, 'Nombre', _name),
+                      const SizedBox(height: 10),
+                      _buildInfoRow(Icons.email, 'Correo electrónico', _email),
+                    ],
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -159,6 +140,31 @@ Widget build(BuildContext context) {
   );
 }
 
+Widget _buildInfoRow(IconData icon, String label, String value) {
+  return Row(
+    children: [
+      Icon(icon, color: Color.fromRGBO(8, 76, 132, 1)),
+      const SizedBox(width: 10),
+      Text(
+        label,
+        style: const TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      const SizedBox(width: 10),
+      Expanded(
+        child: Text(
+          value,
+          style: const TextStyle(
+            fontSize: 16,
+          ),
+          overflow: TextOverflow.ellipsis,
+        ),
+      ),
+    ],
+  );
+}
 }
 
 

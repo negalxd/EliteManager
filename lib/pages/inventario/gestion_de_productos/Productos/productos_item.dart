@@ -116,8 +116,10 @@ Future<String> _fetchProductoName() async {
           statusproducto = newProductoStatus;
         });
       }
+      print('se logro');
+
     } catch (error) {
-      // Manejar el error de la API
+      print('Error en la API');
       print(error);
       // Mostrar un mensaje de error o realizar alguna acción de recuperación
     }

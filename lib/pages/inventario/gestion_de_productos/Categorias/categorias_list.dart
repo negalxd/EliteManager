@@ -88,6 +88,7 @@ class _CategoriasScreenState extends State<CategoriasScreen> {
       });
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('La categoría ${categoria['nombre']} ha sido eliminada correctamente'),
+        backgroundColor: Colors.red,
       ));
     } else {
       print('Error al eliminar la categoría');

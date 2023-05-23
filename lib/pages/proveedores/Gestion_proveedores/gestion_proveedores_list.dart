@@ -88,8 +88,24 @@ Widget build(BuildContext context) {
                   fit: BoxFit.cover,
                 ),
               ),
-                title: Text(proveedores['nombre']),
-                subtitle: Text('${proveedores['email']}'),
+                title: proveedores['estado'] == true
+                ? Text(proveedores['nombre'])
+                : Text(
+                  proveedores['nombre'],
+                  style: const TextStyle(
+                    color: Colors.grey,
+                    decoration: TextDecoration.lineThrough,
+                  ),
+                ),
+                subtitle: proveedores['estado'] == true
+                ? Text('${proveedores['email']}')
+                : Text(
+                  '${proveedores['email']}',
+                  style: const TextStyle(
+                    color: Colors.grey,
+                    decoration: TextDecoration.lineThrough,
+                  ),
+                ),
                 onTap: () {
                 Navigator.pushNamed(
                   context,

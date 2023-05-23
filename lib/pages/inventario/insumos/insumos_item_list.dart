@@ -89,6 +89,7 @@ class _InsumosScreenState extends State<InsumosScreen> {
   // ignore: use_build_context_synchronously
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text('El insumo ${insumo['prov_insumo_nombre']} ha sido eliminado correctamente'),
+      backgroundColor: Colors.red,
     ));
   } else {
     print('Error al eliminar el insumo');
@@ -154,7 +155,9 @@ Widget build(BuildContext context) {
                   },
                 ),
                 onTap: () {
-                  Navigator.pushNamed(context, 'insumositemlote');
+                  Navigator.pushNamed(context, 'insumositemlote', arguments: {
+                      'id_insumo': insumo['id']
+                      });
                 },
               ),
             );
