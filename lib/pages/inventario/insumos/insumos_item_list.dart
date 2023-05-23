@@ -154,7 +154,9 @@ Widget build(BuildContext context) {
                   },
                 ),
                 onTap: () {
-                  Navigator.pushNamed(context, 'insumositemlote');
+                  Navigator.pushNamed(context, 'insumositemlote', arguments: {
+                      'id_insumo': insumo['id']
+                      });
                 },
               ),
             );
