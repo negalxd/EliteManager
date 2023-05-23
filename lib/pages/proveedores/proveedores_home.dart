@@ -24,7 +24,7 @@ class ProvidersScreen extends StatelessWidget {
               CardItem(
                 title: 'Gestión de órdenes de compra',
                 imagePath: 'assets/gestionIns.png',
-                routeName: 'gestion_ordenes_compra',
+                routeName: 'ordenescompra',
               ),
             ],
           ),

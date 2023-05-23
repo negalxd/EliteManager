@@ -33,6 +33,7 @@ class AppRoutes {
     ///////////////////////////Proveedores///////////////////////////////
     'listaprov': (BuildContext context) => Providerlist(),
     'proveedoresitem': (BuildContext context) => ProviderItemCard(),
+    'ordenescompra': (BuildContext context) => OrdersScreen(),
   };
   
 
