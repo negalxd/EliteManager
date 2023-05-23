@@ -86,6 +86,7 @@ class _ProductosScreenState extends State<ProductosScreen> {
   // ignore: use_build_context_synchronously
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text('El producto ${producto['nombre']} ha sido eliminado correctamente'),
+      backgroundColor: Colors.red,
     ));
   } else {
     print('Error al eliminar el producto');

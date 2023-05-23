@@ -18,9 +18,10 @@ class AppRoutes {
     ///////////////////////////insumos///////////////////////////////
     // 'insumos': (BuildContext context) => const SuppliesScreen(),
     'insumoslist': (BuildContext context) => InsumosScreen(),
-    'insumositemlote': (BuildContext context) => const SuppliesLoteScreen(),
-    'insumositemcreate': (BuildContext context) => const AddInsumosWidget(),
     'insumoslistcreate': (BuildContext context) => AddInsumo(),
+    ///////////////////////////insumos-Lotes///////////////////////////////
+    'insumositemlote': (BuildContext context) => const SuppliesLoteScreen(),
+    'insumositemlotecreate': (BuildContext context) => const AddLotesWidget(),
     ///////////////////////////productos///////////////////////////////
     'productoshome': (BuildContext context) => const ProductHomeScreen(),
     'productospag': (BuildContext context) => ProductosScreen(),

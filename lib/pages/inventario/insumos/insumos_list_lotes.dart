@@ -70,8 +70,8 @@ class _SuppliesLoteScreenState extends State<SuppliesLoteScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text("Eliminar insumo"),
-          content: Text("¿Está seguro que desea eliminar el insumo ${loteInsumo['n_lote']}?, esta acción no se puede deshacer."),
+          title: const Text("Eliminar Lote"),
+          content: Text("¿Está seguro que desea eliminar el lote ${loteInsumo['n_lote']}?, esta acción no se puede deshacer."),
           actions: [
             TextButton(
               child: const Text("Cancelar"),
@@ -105,7 +105,8 @@ class _SuppliesLoteScreenState extends State<SuppliesLoteScreen> {
   //mostrar Snack de confirmacion de eliminacion
   // ignore: use_build_context_synchronously
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text('El insumo ${loteInsumo['n_lote']} ha sido eliminado correctamente'),
+      content: Text('El Lote ${loteInsumo['n_lote']} ha sido eliminado correctamente'),
+      backgroundColor: Colors.red,
     ));
   } else {
     print('Error al eliminar el insumo');
@@ -130,6 +131,13 @@ class _SuppliesLoteScreenState extends State<SuppliesLoteScreen> {
                     decoration: InputDecoration(
                       hintText: 'Buscar lotes',
                       prefixIcon: const Icon(Icons.search),
+                      suffixIcon: IconButton(
+                color: Color.fromARGB(255, 4, 75, 134),
+                icon: const Icon(Icons.add_box),
+                onPressed: () {
+                  Navigator.pushNamed(context, 'insumositemlotecreate', arguments: {'id_insumo': insumoId});
+                },
+              ),
                     ),
                   ),
                 ),
@@ -155,8 +163,22 @@ class _SuppliesLoteScreenState extends State<SuppliesLoteScreen> {
                       fit: BoxFit.cover,
                     ),
                   ),
-                    title: Text(loteInsumo['n_lote']),
-                    subtitle: Text('${loteInsumo['stock']}'),
+                    title: loteInsumo['estado'] == true
+                    ? Text(loteInsumo['n_lote'])
+                    : Text(
+                      loteInsumo['n_lote'],
+                      style: const TextStyle(
+                        color: Color.fromARGB(255, 182, 30, 19),
+                      ),
+                    ),
+                    subtitle: loteInsumo['estado'] == true 
+                    ? Text('${loteInsumo['stock']}')
+                    : Text(
+                      'Lote caducado',
+                      style: const TextStyle(
+                        color: Color.fromARGB(255, 182, 30, 19),
+                      ),
+                    ),
                     trailing: IconButton(
                       icon: const Icon(Icons.delete),
                       color: const Color.fromARGB(255, 182, 30, 19),
@@ -165,7 +187,7 @@ class _SuppliesLoteScreenState extends State<SuppliesLoteScreen> {
                       },
                     ),
                     onTap: () {
-                      Navigator.pushNamed(context, 'error');
+                    // no hara nada creo
                     },
                   ),
                 );

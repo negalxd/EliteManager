@@ -49,6 +49,7 @@ class _AddInsumoState extends State<AddInsumo> {
   if (_selectedProveedorId == null || _selectedInsumoId == null) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text('Por favor seleccione un proveedor e insumo.'),
+      backgroundColor: Colors.red,
     ));
     return;
   }

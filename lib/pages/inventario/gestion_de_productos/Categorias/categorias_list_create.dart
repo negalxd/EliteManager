@@ -29,6 +29,11 @@ void _addCategoria() async {
       }));
 
     // Eliminar contexto para que no se pueda regresar a la pantalla anterior
+    //snackbar de confirmación creacion de categoria
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text('Categoría creada correctamente'),
+      backgroundColor: Colors.green,
+    ));
     Navigator.of(context).pop();
     Navigator.pushReplacementNamed(context, 'categorias'); // Utilizar pushReplacementNamed en lugar de pushNamed
 

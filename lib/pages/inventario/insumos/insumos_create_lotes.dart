@@ -1,7 +1,9 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
+import 'package:elite_manager/pages/config.dart';
 
 final _expiryDateController = TextEditingController();
 
@@ -12,41 +14,84 @@ Future<void> _selectExpiryDate(BuildContext context) async {
     firstDate: DateTime.now(),
     lastDate: DateTime.now().add(Duration(days: 365)),
   );
-  if (picked != null)
-  _expiryDateController.text = DateFormat('dd/MM/yyyy').format(picked);
-  else{
+  if (picked != null) {
+    final formattedDate = DateFormat('yyyy-MM-dd').format(picked); // Formatear la fecha en el formato deseado
+    _expiryDateController.text = formattedDate;
+  } else {
     _expiryDateController.text = '';
   }
 }
 
-class AddInsumosWidget extends StatefulWidget {
-  const AddInsumosWidget({Key? key}) : super(key: key);
+class AddLotesWidget extends StatefulWidget {
+  const AddLotesWidget({Key? key}) : super(key: key);
 
   @override
-  _AddInsumosWidgetState createState() => _AddInsumosWidgetState();
+  _AddLotesWidgetState createState() => _AddLotesWidgetState();
 }
 
-class _AddInsumosWidgetState extends State<AddInsumosWidget> {
-  final _formKey = GlobalKey<FormState>();
+class _AddLotesWidgetState extends State<AddLotesWidget> {
+   final _formKey = GlobalKey<FormState>();
 
-  String _productName = '';
-  String _description = '';
-  String _marca = '';
-  String _provider = '';
-  String _fechacad = '';
-  String _lote = '';
+  int insumoId = 0;
+  int stock = 0;
+  String fecha_vencimiento = '';
 
-  File? _image;
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _fetchInsumoId();
+  }
 
-Future<void> _pickImage() async {
-    final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
+  Future<void> _fetchInsumoId() async {
+    final arguments = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
+    if (arguments != null && arguments.containsKey('id_insumo')) {
       setState(() {
-        _image = File(pickedFile.path);
+        insumoId = int.parse(arguments['id_insumo'].toString());
       });
     }
-}
+  }
 
+  Future<void> _sendPostRequest() async {
+    final url = 'http://${Configuracion.apiurl}/Api/lotes-insumos/'; 
+    final data = {
+      "stock": stock,
+      "fecha_vencimiento": fecha_vencimiento,
+      "insumo": insumoId
+    };
+    final headers = {
+      HttpHeaders.contentTypeHeader: 'application/json',
+    };
+
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        headers: headers,
+        body: jsonEncode(data),
+      );
+
+      if (response.statusCode == 201) {
+        // Éxito en la solicitud POST
+        print('Solicitud POST exitosa');
+        //volver a la lista y que este actualizada
+        //Snack de confirmacion de creacion
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Lote creado correctamente'),
+            backgroundColor: Colors.green,
+          ),
+        );
+        Navigator.of(context).pop();
+        Navigator.pushReplacementNamed(context, 'insumositemlote', arguments: {'id_insumo': insumoId});
+
+
+      } else {
+        // Error en la solicitud POST
+        print('Error en la solicitud POST: ${response.statusCode}');
+      }
+    } catch (error) {
+      print('Error en la solicitud POST: $error');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,147 +103,73 @@ Future<void> _pickImage() async {
       resizeToAvoidBottomInset: true,
       body: SingleChildScrollView(
         child: Card(
-        margin: EdgeInsets.all(16),
-        color: Color.fromARGB(255, 255, 255, 255),
-        elevation: 8,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        child: Padding(
-          padding: EdgeInsets.all(16),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                if (_image != null) ...[
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      color: Colors.white,
-                    ),
-                    height: 200,
-                    child: Image.file(_image!, fit: BoxFit.cover, width: double.infinity),
-                  ),
-                  SizedBox(height: 16),
-                ],
-                ElevatedButton.icon(
-                  onPressed: _pickImage,
-                  icon: Icon(Icons.add_photo_alternate, size: 30, color: Color.fromARGB(255, 4, 75, 134),),
-                  label: Text(
-                    'Añadir imagen',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: const Color.fromARGB(255, 4, 75, 134),
-                    ),
-                  ),
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(
-                      Color.fromARGB(255, 255, 255, 255),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 20),
-                TextFormField(
-                  decoration: InputDecoration(
-                    labelText: 'Nombre insumo',
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color.fromARGB(255, 4, 75, 134)),
-                    ),
-                  ),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Por favor ingrese el nombre del insumo';
-                    }
-                    return null;
-                  },
-                  onSaved: (value) {
-                    _productName = value!;
-                  },
-                ),
-                SizedBox(height: 16),
-                DropdownButtonFormField<String>(
-                  decoration: InputDecoration(
-                    labelText: 'Proveedor',
-                    border: OutlineInputBorder(),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Color.fromARGB(255, 4, 75, 134),
-                        width: 2.0,
+          margin: EdgeInsets.all(16),
+          color: Color.fromARGB(255, 255, 255, 255),
+          elevation: 8,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          child: Padding(
+            padding: EdgeInsets.all(16),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  SizedBox(height: 20),
+                  TextFormField(
+                    decoration: InputDecoration(
+                      labelText: 'Stock del lote',
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Color.fromARGB(255, 4, 75, 134)),
                       ),
                     ),
-                    labelStyle: TextStyle(
-                      color: Color.fromARGB(255, 4, 75, 134), // Establece el color del texto del label a blanco
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Por favor ingrese el stock del lote';
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      stock = int.parse(value!);
+                    },
+                  ),
+                  SizedBox(height: 16),
+                  TextFormField(
+                    controller: _expiryDateController,
+                    decoration: InputDecoration(
+                      labelText: 'Fecha de caducidad',
+                      border: OutlineInputBorder(),
                     ),
+                    onTap: () => _selectExpiryDate(context),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Por favor ingrese la fecha de caducidad';
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      fecha_vencimiento = value!;
+                    },
                   ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Por favor selecciona un proveedor';
-                    }
-                    return null;
-                  },
-                  onChanged: (value) {
-                    setState(() {
-                      _provider = value!;
-                    });
-                  },
-                  onSaved: (value) {
-                    _provider = value!;
-                  },
-                  items: ['KFC', 'Fortnite'].map((provider) {
-                    return DropdownMenuItem<String>(
-                      value: provider,
-                      child: Text(provider),
-                    );
-                  }).toList(),
-                ),
-                SizedBox(height: 16),
-                TextFormField(
-                  controller: _expiryDateController,
-                  decoration: InputDecoration(
-                    labelText: 'Fecha de caducidad',
-                    border: OutlineInputBorder(),
+                  SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        _formKey.currentState!.save();
+                        _sendPostRequest(); // Llamar a la función para enviar la solicitud POST
+                      }
+                    },
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(const Color.fromARGB(255, 4, 75, 134)),
+                      foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                    ),
+                    child: Text('Guardar'),
                   ),
-                  onTap: () => _selectExpiryDate(context),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Por favor ingrese la fecha de caducidad';
-                    }
-                    return null;
-                  },
-                  onSaved: (value) {
-                    _fechacad = value!;
-                  },
-                ),
-                SizedBox(height: 16),
-                TextFormField(
-                  decoration: InputDecoration(
-                    labelText: 'Numero de lote',
-                    border: OutlineInputBorder(),
-                  ),
-                  onSaved: (value) {
-                    _lote = value!;
-                  },
-                ),
-                SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      _formKey.currentState!.save();
-                      // TODO: Save the product to the database
-                    }
-                  },
-                  style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(const Color.fromARGB(255, 4, 75, 134)),
-                  foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                  ),
-                  child: Text('Guardar'),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
       ),
-      ),
     );
   }
 }
-

@@ -287,6 +287,7 @@ void _addProduct(
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text('El producto $nombre ha sido añadido correctamente'),
+        backgroundColor: Colors.green,
       ),
     );
     Navigator.of(context).pop();
