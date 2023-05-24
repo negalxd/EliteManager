@@ -156,7 +156,8 @@ Widget build(BuildContext context) {
                 ),
                 onTap: () {
                   Navigator.pushNamed(context, 'insumositemlote', arguments: {
-                      'id_insumo': insumo['id']
+                      'id_insumo': insumo['id'],
+                      'nombre_insumo': insumo['prov_insumo_nombre'],
                       });
                 },
               ),

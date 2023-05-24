@@ -5,12 +5,12 @@ class HelpScreen extends StatelessWidget {
   // ignore: use_key_in_widget_constructors
   const HelpScreen({Key? key});
 
-  final String phoneNumber = '+56983343036';
+  final String phoneNumber = '+56942042069';
   final String email = 'EliteManager@soporte.com';
   final String adminName = 'Elite Manager Team';
 
   void openYT() async {
-    const youtubeUrl = 'https://es.pornhub.com/view_video.php?viewkey=ph59825a55e5ee6';
+    const youtubeUrl = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
     final uri = Uri.parse(youtubeUrl);
     await launchUrl(uri);
 }
@@ -24,7 +24,7 @@ class HelpScreen extends StatelessWidget {
 }
 
   _launchPhone() async {
-  const phoneNumber = '+56983343036';
+  const phoneNumber = '+56942042069';
   //abrira la aplicacion de llamadas
   final Uri phoneLaunchUri = Uri(
     scheme: 'tel',

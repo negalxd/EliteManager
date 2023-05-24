@@ -126,7 +126,7 @@ Widget build(BuildContext context) {
                       const SizedBox(height: 10),
                       _buildInfoRow(Icons.person_outline, 'Nombre', _name),
                       const SizedBox(height: 10),
-                      _buildInfoRow(Icons.email, 'Correo electrónico', _email),
+                      _buildInfoRow(Icons.email, 'Correo', _email),
                     ],
                   ),
                 ),

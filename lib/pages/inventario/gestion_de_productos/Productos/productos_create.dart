@@ -260,8 +260,9 @@ void _addProduct(
   request.fields['descripcion'] = descripcion;
 
   // Agregar categorías individualmente
+  // Agregar categorías individualmente
   for (var i = 0; i < categorias.length; i++) {
-    request.fields['categorias'] = categorias[i];
+    request.fields['categorias'] = categorias[i]; // deberia ser asi request.fields['categorias[$i]'] = categorias[i];
   }
 
   if (imagen != null) {
