@@ -24,7 +24,7 @@ class _ProductosScreenState extends State<ProductosScreen> {
   final utf8decoder = const Utf8Decoder();
 
   void _getProductos() async {
-  final response = await http.get(Uri.parse('http://${Configuracion.apiurl}/Api/productos/'));
+  final response = await http.get(Uri.parse('http://${Configuracion.apiurl}/Api/productos-list/'));
   final List<dynamic> responseData = json.decode(utf8decoder.convert(response.bodyBytes));
   setState(() {
     _productos = responseData.cast<Map<String, dynamic>>();
