@@ -17,6 +17,7 @@ class _EditLotesWidgetState extends State<EditLotesWidget> {
   int loteID = 0;
   int insumoID = 0;
   String n_lote = '';
+  String nombreInsumo = '';
   int stock = 0;
   String comentarios = '';
   String fecha_vencimiento = '';
@@ -45,9 +46,10 @@ class _EditLotesWidgetState extends State<EditLotesWidget> {
 
   Future<void> _fetchLoteID() async {
     final arguments = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
-    if (arguments != null && arguments.containsKey('id_lote')) {
+    if (arguments != null && arguments.containsKey('id_lote') && arguments.containsKey('nombre_insumo')) {
       setState(() {
         loteID = int.parse(arguments['id_lote'].toString());
+        nombreInsumo = arguments['nombre_insumo'].toString();
       });
       await _getLoteRequest(); // Obtener los datos del lote al cargar la pantalla de edición
     }
@@ -119,7 +121,7 @@ class _EditLotesWidgetState extends State<EditLotesWidget> {
           ),
         );
         Navigator.of(context).pop();
-        Navigator.pushReplacementNamed(context, 'insumositemlote', arguments: {'id_insumo': insumoID});
+        Navigator.pushReplacementNamed(context, 'insumositemlote', arguments: {'id_insumo': insumoID , 'nombre_insumo': nombreInsumo});
       } else {
         // Error en la solicitud PUT
         print('Error en la solicitud PUT: ${response.statusCode}');

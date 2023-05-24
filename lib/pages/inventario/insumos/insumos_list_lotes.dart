@@ -191,7 +191,7 @@ class _SuppliesLoteScreenState extends State<SuppliesLoteScreen> {
                       },
                     ),
                     onTap: () {
-                    Navigator.pushNamed(context, 'insumositemloteedit', arguments: {'id_lote': loteInsumo['id']});
+                    Navigator.pushNamed(context, 'insumositemloteedit', arguments: {'id_lote': loteInsumo['id'] , 'nombre_insumo': nombreInsumo});
                     },
                   ),
                 );
