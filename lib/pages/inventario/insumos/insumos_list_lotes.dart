@@ -17,6 +17,7 @@ class _SuppliesLoteScreenState extends State<SuppliesLoteScreen> {
   List<Map<String, dynamic>> _filteredLotesInsumos = [];
 
   int insumoId = 0;
+  String nombreInsumo = '';
 
   @override
   void initState() {
@@ -33,9 +34,12 @@ class _SuppliesLoteScreenState extends State<SuppliesLoteScreen> {
 
   Future<void> _fetchInsumoId() async {
     final arguments = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
-    if (arguments != null && arguments.containsKey('id_insumo')) {
+    if (arguments != null &&
+        arguments.containsKey('id_insumo') && 
+        arguments.containsKey('nombre_insumo')) {
       setState(() {
         insumoId = int.parse(arguments['id_insumo'].toString());
+        nombreInsumo = arguments['nombre_insumo'].toString();
       });
     }
   }
@@ -119,7 +123,7 @@ class _SuppliesLoteScreenState extends State<SuppliesLoteScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Lotes Insumos'),
+        title: Text('Lotes de $nombreInsumo'),
       ),
             body: Column(
               children: [
@@ -135,7 +139,7 @@ class _SuppliesLoteScreenState extends State<SuppliesLoteScreen> {
                 color: Color.fromARGB(255, 4, 75, 134),
                 icon: const Icon(Icons.add_box),
                 onPressed: () {
-                  Navigator.pushNamed(context, 'insumositemlotecreate', arguments: {'id_insumo': insumoId});
+                  Navigator.pushNamed(context, 'insumositemlotecreate', arguments: {'id_insumo': insumoId, 'nombre_insumo': nombreInsumo});
                 },
               ),
                     ),
@@ -187,7 +191,7 @@ class _SuppliesLoteScreenState extends State<SuppliesLoteScreen> {
                       },
                     ),
                     onTap: () {
-                    // no hara nada creo
+                    Navigator.pushNamed(context, 'insumositemloteedit', arguments: {'id_lote': loteInsumo['id']});
                     },
                   ),
                 );

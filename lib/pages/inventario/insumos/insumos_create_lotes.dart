@@ -34,6 +34,7 @@ class _AddLotesWidgetState extends State<AddLotesWidget> {
 
   int insumoId = 0;
   int stock = 0;
+  String nombreInsumo = '';
   String fecha_vencimiento = '';
 
   @override
@@ -44,9 +45,10 @@ class _AddLotesWidgetState extends State<AddLotesWidget> {
 
   Future<void> _fetchInsumoId() async {
     final arguments = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
-    if (arguments != null && arguments.containsKey('id_insumo')) {
+    if (arguments != null && arguments.containsKey('id_insumo') && arguments.containsKey('nombre_insumo')) {
       setState(() {
         insumoId = int.parse(arguments['id_insumo'].toString());
+        nombreInsumo = arguments['nombre_insumo'].toString();
       });
     }
   }
@@ -81,7 +83,7 @@ class _AddLotesWidgetState extends State<AddLotesWidget> {
           ),
         );
         Navigator.of(context).pop();
-        Navigator.pushReplacementNamed(context, 'insumositemlote', arguments: {'id_insumo': insumoId});
+        Navigator.pushReplacementNamed(context, 'insumositemlote', arguments: {'id_insumo': insumoId, 'nombre_insumo': nombreInsumo});
 
 
       } else {
@@ -97,7 +99,7 @@ class _AddLotesWidgetState extends State<AddLotesWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Añadir Insumo'),
+        title: Text('Añadir Lote'),
         centerTitle: true,
       ),
       resizeToAvoidBottomInset: true,

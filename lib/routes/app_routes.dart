@@ -1,4 +1,5 @@
 // Aqui se importan los packages del archivo de rutas de cada carpeta
+import 'package:elite_manager/pages/inventario/insumos/insumos_edit_lotes.dart';
 import 'package:elite_manager/pages/pages.dart';
 import 'package:flutter/material.dart';
 
@@ -22,6 +23,7 @@ class AppRoutes {
     ///////////////////////////insumos-Lotes///////////////////////////////
     'insumositemlote': (BuildContext context) => const SuppliesLoteScreen(),
     'insumositemlotecreate': (BuildContext context) => const AddLotesWidget(),
+    'insumositemloteedit': (BuildContext context) => const EditLotesWidget(),
     ///////////////////////////productos///////////////////////////////
     'productoshome': (BuildContext context) => const ProductHomeScreen(),
     'productospag': (BuildContext context) => ProductosScreen(),
