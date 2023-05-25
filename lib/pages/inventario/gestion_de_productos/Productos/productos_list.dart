@@ -152,9 +152,9 @@ Widget build(BuildContext context) {
                   ),
                 ),
                 subtitle: producto['estado'] == true
-                ? Text('Precio: ${producto['precio']}')
+                ? Text('Precio: \$ ${producto['precio']}')
                 : Text(
-                  'Precio: ${producto['precio']}',
+                  'Precio: \$ ${producto['precio']}',
                   style: const TextStyle(
                     color: Colors.grey,
                     decoration: TextDecoration.lineThrough,

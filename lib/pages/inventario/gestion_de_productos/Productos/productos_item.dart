@@ -224,7 +224,7 @@ Future<String> _fetchProductoName() async {
                           ),
                           SizedBox(height: 4.0),
                           Text(
-                            precioproducto,
+                            '\$ $precioproducto',
                             style: TextStyle(fontSize: 16.0),
                           ),
                           SizedBox(height: 12.0),
