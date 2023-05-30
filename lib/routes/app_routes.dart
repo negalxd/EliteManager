@@ -45,8 +45,9 @@ class AppRoutes {
     //'ordenestrabajoitem': (BuildContext context) => const OrdenesTrabajoItemCard(),
     //'ordentrabajoscreatee': (BuildContext context) => const AddOrdenesTrabajoWidget(),
     //'ordenestrabajoedit': (BuildContext context) => const EditOrdenesTrabajoWidget(),
-
-
+    'gestionClientes': (BuildContext context) => CotizacionesProductScreen(),
+    'crearcliente': (BuildContext context) => const AddUserInfoWidget(),
+    'itemscotizacion': (BuildContext context) => CotizacionesScreen(),
   };
   
 
