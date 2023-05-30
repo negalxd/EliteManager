@@ -38,7 +38,7 @@ class _OrdenesTrabajoScreenState extends State<OrdenesTrabajoScreen> {
     setState(() {
       _FilteredOrdenesTrabajo = _OrdenesTrabajo
           .where((orden) =>
-              orden['Numero'].toString().contains(query.toLowerCase()))
+              orden['cod_ot'].toString().contains(query))
           .toList();
     });
   }
@@ -75,7 +75,7 @@ class _OrdenesTrabajoScreenState extends State<OrdenesTrabajoScreen> {
 
   void _deleteordentrabajo(Map<String, dynamic> ordentrabajo) async {
   final response = await http.delete(Uri.parse('http://${Configuracion.apiurl}/Api/ordenes-trabajo/${ordentrabajo['id']}/'));
-  if (response.statusCode == 200) {
+  if (response.statusCode == 204) {
     setState(() {
       _OrdenesTrabajo.remove(ordentrabajo);
       _FilteredOrdenesTrabajo = _OrdenesTrabajo;
@@ -83,7 +83,7 @@ class _OrdenesTrabajoScreenState extends State<OrdenesTrabajoScreen> {
   //mostrar Snack de confirmacion de eliminacion
   // ignore: use_build_context_synchronously
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text('El ordentrabajo ${ordentrabajo['nombre']} ha sido eliminado correctamente'),
+      content: Text('El orden de trabajo ${ordentrabajo['nombre']} ha sido eliminado correctamente'),
       backgroundColor: Colors.red,
     ));
   } else {
@@ -132,32 +132,23 @@ Widget build(BuildContext context) {
                 borderRadius: BorderRadius.circular(8.0),
               ),
               child: ListTile(
-              leading: CircleAvatar(
-                child: FadeInImage(
-                  placeholder: const AssetImage('assets/Loading_icon.gif'),
-                  image: ordentrabajo['imagen'] != null ? NetworkImage(ordentrabajo['imagen']) : const AssetImage('assets/defaultordentrabajo.jpg') as ImageProvider,
-                  fit: BoxFit.cover,
-                ),
-              ),
-
-                title: ordentrabajo['estado'] == true
-                ? Text(ordentrabajo['nombre'])
-                : Text(
-                  ordentrabajo['nombre'],
-                  style: const TextStyle(
-                    color: Colors.grey,
-                    decoration: TextDecoration.lineThrough,
-                  ),
-                ),
-                subtitle: ordentrabajo['estado'] == true
-                ? Text('Precio: \$ ${ordentrabajo['precio']}')
-                : Text(
-                  'Precio: \$ ${ordentrabajo['precio']}',
-                  style: const TextStyle(
-                    color: Colors.grey,
-                    decoration: TextDecoration.lineThrough,
-                  ),
-                ),
+                    title: Text('Orden Nº ${ordentrabajo['cod_ot']}'),
+                    subtitle: RichText(
+                      text: TextSpan(
+                        text: '${ordentrabajo['fecha_objetivo']}\n',
+                        style: DefaultTextStyle.of(context).style,
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: 'Prioridad: ',
+                            style: TextStyle(fontSize: 12, color: Colors.grey),
+                          ),
+                          TextSpan(
+                            text: '${ordentrabajo['prioridad']}',
+                            style: TextStyle(fontSize: 12),
+                          ),
+                        ],
+                      ),
+                    ),
                 trailing: IconButton(
                   icon: const Icon(Icons.delete),
                   color: const Color.fromARGB(255, 182, 30, 19),

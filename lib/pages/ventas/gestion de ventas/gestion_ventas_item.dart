@@ -77,11 +77,17 @@ class _VentasItemCardState extends State<VentasItemCard> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    //centrar la imagen
+                    Center(
+                      child:
+                    Image.asset('assets/elitelogo.png', width: 175.0),
+                    ),
                     Padding(
                       padding: EdgeInsets.all(10.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
+                          
                           Expanded(
                             child: Text(
                               codventa,
@@ -153,7 +159,10 @@ class _VentasItemCardState extends State<VentasItemCard> {
                         ],
                       ),
                     ),
-                    SizedBox(height: 40.0),
+                    Image.asset(
+                      'assets/descargar.jpeg',
+                      height: 250,
+                    ),
                   ],
                 ),
               ),

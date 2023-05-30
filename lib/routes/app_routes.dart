@@ -41,7 +41,7 @@ class AppRoutes {
     'gestionVentas': (BuildContext context) => VentasListWidget(),
     'ventasitem': (BuildContext context) => const VentasItemCard(),
     ////////////////Ventas-Gestion de ordenes de trabajo////////////
-    'ordenestrabajolist': (BuildContext context) => OrdenesTrabajoScreen(),
+    'gestionOrdenes': (BuildContext context) => OrdenesTrabajoScreen(),
     //'ordenestrabajoitem': (BuildContext context) => const OrdenesTrabajoItemCard(),
     //'ordentrabajoscreatee': (BuildContext context) => const AddOrdenesTrabajoWidget(),
     //'ordenestrabajoedit': (BuildContext context) => const EditOrdenesTrabajoWidget(),
