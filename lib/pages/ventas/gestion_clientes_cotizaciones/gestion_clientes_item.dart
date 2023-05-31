@@ -1,36 +1,55 @@
 import 'package:flutter/material.dart';
+import 'package:mailer/mailer.dart';
+import 'package:mailer/smtp_server.dart';
 
 class CotizacionItemCard extends StatelessWidget {
   final List<Map<String, dynamic>> cotizacion;
 
   const CotizacionItemCard({Key? key, required this.cotizacion}) : super(key: key);
 
-  void _enviarCotizacion(BuildContext context, String nombre, String correo) {
-    // Aquí puedes implementar la lógica para enviar la cotización por correo
-    // Utiliza los valores de "nombre" y "correo" para enviar la información
+  Future<void> sendEmail(String nombre, String correo) async {
+    String username = 'testeodecorrelocura@gmail.com';
+    String password = 'ansrzdvhrlmzuvbe';
 
-    // Por ejemplo, puedes mostrar un diálogo de confirmación:
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Cotización enviada'),
-          content: Text('Se ha enviado la cotización a: $correo'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('Aceptar'),
-            ),
-          ],
-        );
-      },
-    );
+    final smtpServer = gmail(username, password);
+
+    final message = Message()
+      ..from = Address(username, 'Elite Manager ')
+      ..recipients.add(correo)
+      ..subject = 'Cotización Elite Manager'
+      ..text = buildEmailContent(nombre);
+
+    try {
+      final sendReport = await send(message, smtpServer);
+      print('Correo enviado: ${sendReport.toString()}');
+    } catch (e) {
+      print('Error al enviar el correo: $e');
+      throw Exception('Error al enviar el correo');
+    }
   }
 
-  @override
-  Widget build(BuildContext context) {
+  String buildEmailContent(String nombre) {
+    String content = 'Hola $nombre,\n\nAquí está tu cotización:\n\n';
+
+    cotizacion.forEach((producto) {
+      final String nombreProducto = producto['nombre'];
+      final int precioProducto = producto['precio'];
+      final int cantidadProducto = producto['cantidad'];
+      int totalProducto = precioProducto * cantidadProducto;
+
+      content += 'Producto: $nombreProducto\n';
+      content += 'Precio: \$${precioProducto.toStringAsFixed(2)}\n';
+      content += 'Cantidad: $cantidadProducto\n';
+      content += 'SubTotal: \$${totalProducto.toStringAsFixed(2)}\n\n';
+    });
+
+    int totalCotizacion = calculateTotalCotizacion();
+    content += 'Total de la cotización: \$${totalCotizacion.toStringAsFixed(2)}\n';
+
+    return content;
+  }
+
+  int calculateTotalCotizacion() {
     int totalCotizacion = 0;
 
     cotizacion.forEach((producto) {
@@ -40,6 +59,62 @@ class CotizacionItemCard extends StatelessWidget {
       totalCotizacion += totalProducto;
     });
 
+    return totalCotizacion;
+  }
+
+  void _enviarCotizacion(BuildContext context, String nombre, String correo) {
+    sendEmail(nombre, correo)
+      .then((_) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Cotización enviada'),
+              content: Text('Se ha enviado la cotización a: $correo'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pushNamed('ventas');
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('La cotización ha sido enviada con éxito.'),
+                      ),
+                    ); // Redirigir a la pantalla de ventas
+                  },
+                  child: const Text('Aceptar'),
+                ),
+              ],
+            );
+          },
+        );
+      })
+      .catchError((error) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Error al enviar la cotización'),
+              content: Text('Ocurrió un error al enviar la cotización. Por favor, inténtalo nuevamente.'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('Aceptar'),
+                ),
+              ],
+            );
+          },
+        );
+        print('Error al enviar el correo: $error');
+      });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    int totalCotizacion = calculateTotalCotizacion();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Cotización'),
@@ -47,34 +122,29 @@ class CotizacionItemCard extends StatelessWidget {
       ),
       body: Container(
         margin: EdgeInsets.symmetric(horizontal: 10.0),
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            maxWidth: MediaQuery.of(context).size.width,
+        child: Card(
+          elevation: 4.0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16.0),
           ),
-          child: Card(
-            elevation: 4.0,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16.0),
-            ),
-            margin: EdgeInsets.all(35.0),
-            color: const Color.fromARGB(255, 253, 253, 253), // Cambiar el color del fondo a azul
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: EdgeInsets.all(10.0),
-                  child: Text(
-                    'Productos',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18.0,
-                      color: const Color.fromRGBO(8, 76, 132, 1), // Cambiar el color del texto a blanco
-                    ),
+          margin: EdgeInsets.all(35.0),
+          color: const Color.fromARGB(255, 253, 253, 253),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.all(10.0),
+                child: Text(
+                  'Productos',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18.0,
+                    color: const Color.fromRGBO(8, 76, 132, 1),
                   ),
                 ),
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
+              ),
+              Expanded(
+                child: ListView.builder(
                   itemCount: cotizacion.length,
                   itemBuilder: (BuildContext context, int index) {
                     final producto = cotizacion[index];
@@ -84,11 +154,10 @@ class CotizacionItemCard extends StatelessWidget {
                     int totalProducto = precioProducto * cantidadProducto;
 
                     return Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 12.0),
+                      padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          SizedBox(height: 12.0),
                           Text(
                             'Producto: $nombreProducto',
                             style: TextStyle(fontSize: 16.0),
@@ -115,92 +184,97 @@ class CotizacionItemCard extends StatelessWidget {
                     );
                   },
                 ),
-                Padding(
-                  padding: EdgeInsets.all(12.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      SizedBox(height: 12.0),
-                      Text(
-                        'Total de la cotización:',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16.0,
-                          color: const Color.fromRGBO(8, 76, 132, 1), // Cambiar el color del texto a blanco
-                        ),
+              ),
+              Padding(
+                padding: EdgeInsets.all(12.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    SizedBox(height: 12.0),
+                    Text(
+                      'Total de la cotización:',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16.0,
+                        color: const Color.fromRGBO(8, 76, 132, 1),
                       ),
-                      SizedBox(height: 4.0),
-                      Text(
-                        '\$${totalCotizacion.toStringAsFixed(2)}',
-                        style: TextStyle(fontSize: 16.0),
-                      ),
-                      SizedBox(height: 12.0),
-                      ElevatedButton(
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              String nombre = '';
-                              String correo = '';
+                    ),
+                    SizedBox(height: 4.0),
+                    Text(
+                      '\$${totalCotizacion.toStringAsFixed(2)}',
+                      style: TextStyle(fontSize: 16.0),
+                    ),
+                    SizedBox(height: 12.0),
+                    ElevatedButton(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            String nombre = '';
+                            String correo = '';
 
-                              return AlertDialog(
-                                title: Text('Enviar cotización'),
-                                content: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    SizedBox(height: 8.0), // Agregar margen superior
-                                    TextField(
-                                      onChanged: (value) {
-                                        nombre = value;
-                                      },
-                                      decoration: InputDecoration(
-                                        labelText: 'Nombre',
-                                        contentPadding: EdgeInsets.symmetric(horizontal: 16.0),
-                                      ),
-                                    ),
-                                    SizedBox(height: 8.0), // Agregar espacio entre campos
-                                    TextField(
-                                      onChanged: (value) {
-                                        correo = value;
-                                      },
-                                      decoration: InputDecoration(
-                                        labelText: 'Correo',
-                                        contentPadding: EdgeInsets.symmetric(horizontal: 16.0),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                      _enviarCotizacion(context, nombre, correo);
+                            return AlertDialog(
+                              title: Text('Enviar cotización'),
+                              content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  SizedBox(height: 8.0),
+                                  TextField(
+                                    onChanged: (value) {
+                                      nombre = value;
                                     },
-                                    child: Text('Enviar'),
+                                    decoration: InputDecoration(
+                                      labelText: 'Nombre',
+                                      contentPadding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
+                                      border: OutlineInputBorder(),
+                                    ),
                                   ),
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
+                                  SizedBox(height: 8.0),
+                                  TextField(
+                                    onChanged: (value) {
+                                      correo = value;
                                     },
-                                    child: Text('Cancelar'),
+                                    decoration: InputDecoration(
+                                      labelText: 'Correo electrónico',
+                                      contentPadding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
+                                      border: OutlineInputBorder(),
+                                    ),
                                   ),
                                 ],
-                              );
-                            },
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          primary: const Color.fromARGB(255, 250, 250, 250), // Cambiar el color del botón a azul
-                          onPrimary: const Color.fromRGBO(8, 76, 132, 1), // Cambiar el color del texto a blanco
-                          padding: EdgeInsets.symmetric(horizontal: 24.0), // Ajustar el espaciado interno del botón
-                        ),
-                        child: Text('Enviar cotización'),
-                      ),
-                    ],
-                  ),
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text('Cancelar'),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    if (nombre.isNotEmpty && correo.isNotEmpty) {
+                                      Navigator.of(context).pop();
+                                      _enviarCotizacion(context, nombre, correo);
+                                    } else {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                          content: Text('Por favor, ingresa el nombre y el correo electrónico.'),
+                                        ),
+                                      );
+                                    }
+                                  },
+                                  child: Text('Enviar'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      child: Text('Enviar cotización'),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
