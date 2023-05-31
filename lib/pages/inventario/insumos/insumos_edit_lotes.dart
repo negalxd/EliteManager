@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:elite_manager/pages/config.dart';
+import 'package:intl/intl.dart';
 
 class EditLotesWidget extends StatefulWidget {
   const EditLotesWidget({Key? key}) : super(key: key);
@@ -17,6 +18,7 @@ class _EditLotesWidgetState extends State<EditLotesWidget> {
   int loteID = 0;
   int insumoID = 0;
   String n_lote = '';
+  String nombreInsumo = '';
   int stock = 0;
   String comentarios = '';
   String fecha_vencimiento = '';
@@ -45,9 +47,10 @@ class _EditLotesWidgetState extends State<EditLotesWidget> {
 
   Future<void> _fetchLoteID() async {
     final arguments = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
-    if (arguments != null && arguments.containsKey('id_lote')) {
+    if (arguments != null && arguments.containsKey('id_lote') && arguments.containsKey('nombre_insumo')) {
       setState(() {
         loteID = int.parse(arguments['id_lote'].toString());
+        nombreInsumo = arguments['nombre_insumo'].toString();
       });
       await _getLoteRequest(); // Obtener los datos del lote al cargar la pantalla de edición
     }
@@ -76,7 +79,7 @@ class _EditLotesWidgetState extends State<EditLotesWidget> {
           insumoID = responseData['insumo'];
 
           // Establecer la fecha de caducidad en el controlador correspondiente
-          _expiryDateController.text = fecha_vencimiento;
+          _expiryDateController.text = DateFormat('dd-MM-yyyy').format(DateTime.parse(fecha_vencimiento));
 
           // Actualizar el valor del controlador de comentarios
           _commentsController.text = comentarios;
@@ -119,7 +122,7 @@ class _EditLotesWidgetState extends State<EditLotesWidget> {
           ),
         );
         Navigator.of(context).pop();
-        Navigator.pushReplacementNamed(context, 'insumositemlote', arguments: {'id_insumo': insumoID});
+        Navigator.pushReplacementNamed(context, 'insumositemlote', arguments: {'id_insumo': insumoID , 'nombre_insumo': nombreInsumo});
       } else {
         // Error en la solicitud PUT
         print('Error en la solicitud PUT: ${response.statusCode}');
@@ -180,6 +183,7 @@ class _EditLotesWidgetState extends State<EditLotesWidget> {
                     ),
                     readOnly: true, // Desactivar la edición manual de la fecha
                   ),
+                  Text('La fecha de caducidad no es modificable', style: TextStyle(color: Colors.grey)),
                   SizedBox(height: 20),
                   TextFormField(
                     controller: _commentsController,

@@ -37,6 +37,18 @@ class AppRoutes {
     'listaprov': (BuildContext context) => Providerlist(),
     'proveedoresitem': (BuildContext context) => ProviderItemCard(),
     'ordenescompra': (BuildContext context) => OrdersScreen(),
+    ///////////////////////////Ventas///////////////////////////////
+    'gestionVentas': (BuildContext context) => VentasListWidget(),
+    'ventasitem': (BuildContext context) => const VentasItemCard(),
+    ////////////////Ventas-Gestion de ordenes de trabajo////////////
+    'gestionOrdenes': (BuildContext context) => OrdenesTrabajoScreen(),
+    'ordentrabajositem': (BuildContext context) => const OrdenItemCard(),
+    'ordentrabajoscreate': (BuildContext context) => const AddOrdenesWidget(),
+    'ordenestrabajoedit': (BuildContext context) => const EditOrdenesWidget(),
+    ////////////////Ventas-Gestion de cotizaciones////////////////
+    'gestionClientes': (BuildContext context) => CotizacionesProductScreen(),
+    'cantidadcotizacion': (BuildContext context) => CotizacionesScreen(productosSeleccionados : [],),
+    'cotizacioncard': (BuildContext context) => CotizacionItemCard(cotizacion:[],),
   };
   
 

@@ -57,7 +57,7 @@ class _AddLotesWidgetState extends State<AddLotesWidget> {
     final url = 'http://${Configuracion.apiurl}/Api/lotes-insumos/'; 
     final data = {
       "stock": stock,
-      "fecha_vencimiento": fecha_vencimiento,
+      "fecha_vencimiento": DateFormat('yyyy-MM-dd').format(DateTime.parse(fecha_vencimiento)),
       "insumo": insumoId
     };
     final headers = {
@@ -135,7 +135,10 @@ class _AddLotesWidgetState extends State<AddLotesWidget> {
                     },
                   ),
                   SizedBox(height: 16),
-                  TextFormField(
+                  GestureDetector(
+                  onTap: () => _selectExpiryDate(context),
+                  child: AbsorbPointer(
+                  child: TextFormField(
                     controller: _expiryDateController,
                     decoration: InputDecoration(
                       labelText: 'Fecha de caducidad',
@@ -152,6 +155,8 @@ class _AddLotesWidgetState extends State<AddLotesWidget> {
                       fecha_vencimiento = value!;
                     },
                   ),
+                ),  
+                ),
                   SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: () {

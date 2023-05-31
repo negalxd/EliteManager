@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:elite_manager/pages/config.dart';
-import 'dart:async';
 
 class CategoriasScreen extends StatefulWidget {
   @override
