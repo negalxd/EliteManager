@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:elite_manager/pages/config.dart';
+import 'package:intl/intl.dart';
 
 class EditLotesWidget extends StatefulWidget {
   const EditLotesWidget({Key? key}) : super(key: key);
@@ -78,7 +79,7 @@ class _EditLotesWidgetState extends State<EditLotesWidget> {
           insumoID = responseData['insumo'];
 
           // Establecer la fecha de caducidad en el controlador correspondiente
-          _expiryDateController.text = fecha_vencimiento;
+          _expiryDateController.text = DateFormat('dd-MM-yyyy').format(DateTime.parse(fecha_vencimiento));
 
           // Actualizar el valor del controlador de comentarios
           _commentsController.text = comentarios;
@@ -182,6 +183,7 @@ class _EditLotesWidgetState extends State<EditLotesWidget> {
                     ),
                     readOnly: true, // Desactivar la edición manual de la fecha
                   ),
+                  Text('La fecha de caducidad no es modificable', style: TextStyle(color: Colors.grey)),
                   SizedBox(height: 20),
                   TextFormField(
                     controller: _commentsController,

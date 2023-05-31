@@ -42,9 +42,10 @@ class AppRoutes {
     'ventasitem': (BuildContext context) => const VentasItemCard(),
     ////////////////Ventas-Gestion de ordenes de trabajo////////////
     'gestionOrdenes': (BuildContext context) => OrdenesTrabajoScreen(),
-    //'ordenestrabajoitem': (BuildContext context) => const OrdenesTrabajoItemCard(),
-    //'ordentrabajoscreatee': (BuildContext context) => const AddOrdenesTrabajoWidget(),
-    //'ordenestrabajoedit': (BuildContext context) => const EditOrdenesTrabajoWidget(),
+    'ordentrabajositem': (BuildContext context) => const OrdenItemCard(),
+    'ordentrabajoscreate': (BuildContext context) => const AddOrdenesWidget(),
+    'ordenestrabajoedit': (BuildContext context) => const EditOrdenesWidget(),
+    ////////////////Ventas-Gestion de cotizaciones////////////////
     'gestionClientes': (BuildContext context) => CotizacionesProductScreen(),
     'cantidadcotizacion': (BuildContext context) => CotizacionesScreen(productosSeleccionados : [],),
     'cotizacioncard': (BuildContext context) => CotizacionItemCard(cotizacion:[],),
