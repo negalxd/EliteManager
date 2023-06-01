@@ -297,6 +297,7 @@ void _addProduct(
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text('Error al añadir el producto'),
+        backgroundColor: Colors.red,
       ),
     );
     print('Error al añadir el producto');

@@ -79,6 +79,7 @@ class CotizacionItemCard extends StatelessWidget {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text('La cotización ha sido enviada con éxito.'),
+                        backgroundColor: Colors.green,
                       ),
                     ); // Redirigir a la pantalla de ventas
                   },
@@ -258,6 +259,7 @@ class CotizacionItemCard extends StatelessWidget {
                                       ScaffoldMessenger.of(context).showSnackBar(
                                         SnackBar(
                                           content: Text('Por favor, ingresa el nombre y el correo electrónico.'),
+                                          backgroundColor: Colors.red,
                                         ),
                                       );
                                     }
