@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:elite_manager/pages/config.dart';
+import 'package:intl/intl.dart';
 
 class VentasListWidget extends StatefulWidget {
   @override
@@ -20,11 +21,27 @@ class _VentasListWidgetState extends State<VentasListWidget> {
     _getVentas();
   }
 
-  void _getVentas() async {
+  Future<void> _getVentas() async {
     final response = await http.get(Uri.parse('http://${Configuracion.apiurl}/Api/ventas/'));
     final List<dynamic> responseData = json.decode(utf8.decode(response.bodyBytes));
+
+    final List<Map<String, dynamic>> ventas = [];
+    for (final venta in responseData) {
+      final List<Map<String, dynamic>> productosVenta =
+          List<Map<String, dynamic>>.from(venta['ventasitems_set']);
+
+      ventas.add({
+        'id': venta['id'],
+        'cod_venta': venta['cod_ventas'],
+        'total_venta': venta['total_venta'],
+        'fecha_venta': venta['fecha_venta'],
+        'caja': venta['caja'],
+        'producto_items': productosVenta,
+      });
+    }
+
     setState(() {
-      _ventas = responseData.cast<Map<String, dynamic>>();
+      _ventas = ventas;
       _filteredVentas = _ventas.toList();
     });
     print(_filteredVentas);
@@ -80,7 +97,9 @@ class _VentasListWidgetState extends State<VentasListWidget> {
                     title: Text(ventas['cod_venta']),
                     subtitle: RichText(
                       text: TextSpan(
-                        text: '${ventas['fecha_venta']}\n',
+                        text: '${DateFormat('dd-MM-yyyy').format(
+                              DateTime.parse(ventas['fecha_venta']),
+                            )}\n',
                         style: DefaultTextStyle.of(context).style,
                         children: <TextSpan>[
                           TextSpan(
@@ -118,3 +137,4 @@ class _VentasListWidgetState extends State<VentasListWidget> {
     );
   }
 }
+

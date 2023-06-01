@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class VentasItemCard extends StatefulWidget {
   const VentasItemCard({Key? key}) : super(key: key);
@@ -12,7 +13,7 @@ class _VentasItemCardState extends State<VentasItemCard> {
   String codventa = '';
   List<Map<String, dynamic>> prodventa = [];
   String fechaventa = '';
-  String totalventa = '';
+  int totalventa = 0;
   String cajaventa = '';
 
   @override
@@ -36,7 +37,7 @@ class _VentasItemCardState extends State<VentasItemCard> {
         codventa = arguments['cod_ven'].toString();
         prodventa = List<Map<String, dynamic>>.from(arguments['prod_ven']);
         fechaventa = arguments['fecha_ven'].toString();
-        totalventa = _calculateTotal(prodventa).toString();
+        totalventa = _calculateTotal(prodventa);
         cajaventa = arguments['caja_ven'].toString();
       });
     }
@@ -45,7 +46,9 @@ class _VentasItemCardState extends State<VentasItemCard> {
   int _calculateTotal(List<Map<String, dynamic>> products) {
     int total = 0;
     for (final product in products) {
-      total += product['precio'] as int;
+      int precio = product['precio'] as int;
+      int cantidad = product['cantidad'] as int;
+      total += precio * cantidad;
     }
     return total;
   }
@@ -79,15 +82,13 @@ class _VentasItemCardState extends State<VentasItemCard> {
                   children: [
                     //centrar la imagen
                     Center(
-                      child:
-                    Image.asset('assets/elitelogo.png', width: 175.0),
+                      child: Image.asset('assets/elitelogo.png', width: 175.0),
                     ),
                     Padding(
                       padding: EdgeInsets.all(10.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          
                           Expanded(
                             child: Text(
                               codventa,
@@ -116,13 +117,15 @@ class _VentasItemCardState extends State<VentasItemCard> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: prodventa.map((producto) {
-                              String nombreProducto = producto['nombre'];
-                              int precioProducto = producto['precio'];
+                              String nombreProducto =
+                                  producto['producto_nombre'];
+                              int precioProducto = producto['precio'] as int;
+                              int cantidadProducto = producto['cantidad'] as int;
 
                               return Text(
-                                '$nombreProducto - \$$precioProducto',
-                                style: TextStyle(fontSize: 16.0),
-                              );
+                              '$nombreProducto - \$$precioProducto x $cantidadProducto = \$${precioProducto * cantidadProducto}',
+                              style: TextStyle(fontSize: 16.0),
+                            );
                             }).toList(),
                           ),
                           SizedBox(height: 12.0),
@@ -135,7 +138,9 @@ class _VentasItemCardState extends State<VentasItemCard> {
                           ),
                           SizedBox(height: 4.0),
                           Text(
-                            fechaventa,
+                            DateFormat('dd-MM-yyyy').format(
+                              DateTime.parse(fechaventa),
+                            ),
                             style: TextStyle(fontSize: 16.0),
                           ),
                           SizedBox(height: 12.0),
@@ -154,7 +159,7 @@ class _VentasItemCardState extends State<VentasItemCard> {
                           SizedBox(height: 12.0),
                           Text(
                             'Caja $cajaventa',
-                            style: TextStyle(fontSize: 12.0),
+                            style: TextStyle(fontSize: 14.0),
                           ),
                         ],
                       ),
